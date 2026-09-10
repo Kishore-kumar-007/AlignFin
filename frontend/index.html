@@ -1,24 +1,703 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2310b981'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AlignFin — Explainable Financial Suitability Intelligence</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <style>
-      body {
-        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      }
-      .font-mono {
-        font-family: 'JetBrains Mono', monospace;
-      }
-    </style>
-  </head>
-  <body class="bg-slate-950 text-slate-100 min-h-screen antialiased selection:bg-emerald-500 selection:text-white">
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AlignFin — Explainable Financial Product Suitability Intelligence Engine</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="min-h-screen bg-[#0b0f19] text-gray-100 antialiased selection:bg-blue-600 selection:text-white">
+
+  <!-- Navigation Bar -->
+  <header class="border-b border-gray-800/80 bg-[#0d1322]/90 backdrop-blur sticky top-0 z-30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-blue-500/20">
+          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-xl font-black tracking-tight text-white">Align<span class="text-blue-500">Fin</span></span>
+            <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/30">Intelligence Engine</span>
+          </div>
+          <p class="text-xs text-gray-400 hidden sm:block">Explainable Financial Product Suitability & Evidence Auditor</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button id="open-doc-auditor-btn" class="flex items-center gap-2 px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-blue-600 hover:bg-blue-500 text-white shadow-md shadow-blue-600/25 transition-all">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          <span class="hidden sm:inline">Analyze Product Document</span>
+          <span class="sm:hidden">Audit Doc</span>
+        </button>
+        <button id="open-comparison-btn" class="flex items-center gap-2 px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-200 border border-gray-700 shadow-sm transition-colors">
+          <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+          Comparison Matrix
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Scenario Quick Switcher Bar -->
+  <section class="border-b border-gray-800 bg-[#0e1526]/60 px-4 py-3">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-3">
+      <div class="flex items-center gap-2 text-xs text-gray-400 font-semibold uppercase tracking-wider">
+        <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        Demo Scenarios:
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 flex-1 max-w-4xl">
+        <button class="scenario-btn text-left p-2 rounded-lg border border-blue-500 bg-blue-950/40 text-blue-400 text-xs transition-all" data-scenario="SCENARIO_1">
+          <div class="font-bold flex items-center justify-between">
+            <span>Scenario 1</span>
+            <span class="text-[10px] opacity-75">Loans</span>
+          </div>
+          <div class="text-[11px] text-gray-300 truncate">Headline Rate Trap</div>
+        </button>
+
+        <button class="scenario-btn text-left p-2 rounded-lg border border-gray-800 bg-gray-900 text-gray-400 text-xs transition-all hover:border-gray-700" data-scenario="SCENARIO_2">
+          <div class="font-bold flex items-center justify-between">
+            <span>Scenario 2</span>
+            <span class="text-[10px] opacity-75">Investments</span>
+          </div>
+          <div class="text-[11px] text-gray-300 truncate">Risk Mismatch (-32pts)</div>
+        </button>
+
+        <button class="scenario-btn text-left p-2 rounded-lg border border-gray-800 bg-gray-900 text-gray-400 text-xs transition-all hover:border-gray-700" data-scenario="SCENARIO_3">
+          <div class="font-bold flex items-center justify-between">
+            <span>Scenario 3</span>
+            <span class="text-[10px] opacity-75">Savings</span>
+          </div>
+          <div class="text-[11px] text-gray-300 truncate">Flexi vs Locked FD</div>
+        </button>
+
+        <button class="scenario-btn text-left p-2 rounded-lg border border-gray-800 bg-gray-900 text-gray-400 text-xs transition-all hover:border-gray-700" data-scenario="CUSTOM">
+          <div class="font-bold flex items-center justify-between">
+            <span>Sandbox</span>
+            <span class="text-[10px] opacity-75">Live</span>
+          </div>
+          <div class="text-[11px] text-gray-300 truncate">Custom Simulator</div>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Container -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+    <!-- Active Scenario Explanation Banner -->
+    <div class="mb-6 p-4 rounded-xl bg-blue-950/30 border border-blue-500/30 flex items-start gap-3">
+      <div class="p-2 rounded-lg bg-blue-500/20 text-blue-400 mt-0.5">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      </div>
+      <div>
+        <h4 id="scenario-title" class="text-sm font-bold text-blue-200">Arjun — Headline Rate Trap (Loans)</h4>
+        <p id="scenario-description" class="text-xs text-gray-300 mt-1 leading-relaxed">
+          Arjun wants to prepay a 7-year loan in 3 years. See why 9.2% Loan B beats 8.5% Loan A by ₹52,000+ in Total Cost of Borrowing.
+        </p>
+      </div>
+    </div>
+
+    <!-- 2 Column Layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- Left Column: User Balance Sheet & Solvency (4 Cols) -->
+      <div class="lg:col-span-4 space-y-6">
+
+        <!-- Financial Buffer & Solvency Index (FBSI) Card -->
+        <div class="glass-panel rounded-2xl p-5 border border-gray-800 shadow-xl relative overflow-hidden">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-sm font-bold tracking-wide uppercase text-gray-300 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+              Financial Buffer Index
+            </h3>
+            <span id="fbsi-tier" class="px-2.5 py-1 text-xs font-semibold rounded-full bg-amber-950/60 text-amber-400 border border-amber-500/40">
+              MODERATE CAPACITY
+            </span>
+          </div>
+
+          <div class="flex items-baseline justify-between py-2 border-b border-gray-800">
+            <div>
+              <span class="text-xs text-gray-400">FBSI Solvency Score</span>
+              <div class="text-3xl font-black text-white" id="fbsi-score">77.1</div>
+            </div>
+            <div class="text-right">
+              <span class="text-xs text-gray-400">Monthly Surplus ($M_s$)</span>
+              <div class="text-base font-bold text-emerald-400" id="stat-surplus">₹40,000</div>
+              <span class="text-[11px] text-gray-400" id="stat-surplus-ratio">47.1% of income</span>
+            </div>
+          </div>
+
+          <!-- Emergency Runway Indicator -->
+          <div class="mt-4">
+            <div class="flex justify-between text-xs mb-1.5">
+              <span class="text-gray-400">Emergency Runway ($R$)</span>
+              <span class="font-bold text-gray-200" id="stat-runway">3.0 Months</span>
+            </div>
+            <div class="w-full bg-gray-800 rounded-full h-2 overflow-hidden">
+              <div id="bar-runway" class="bg-emerald-500 h-2 rounded-full transition-all duration-300" style="width: 50%"></div>
+            </div>
+            <div class="flex justify-between text-[10px] text-gray-500 mt-1">
+              <span>0m (Vulnerable)</span>
+              <span>3m (Threshold)</span>
+              <span>6m+ (Robust)</span>
+            </div>
+          </div>
+
+          <!-- DTI Ratio -->
+          <div class="mt-4 flex items-center justify-between text-xs py-2 px-3 rounded-lg bg-gray-900/60 border border-gray-800">
+            <span class="text-gray-400">Debt-to-Income (DTI)</span>
+            <span class="font-bold text-gray-200" id="stat-dti">5.9%</span>
+          </div>
+
+          <!-- Risk Mismatch Alert Banner (Shows when active) -->
+          <div id="risk-mismatch-banner" class="hidden mt-4 p-3 rounded-xl bg-orange-950/40 border border-orange-500/40 text-xs">
+            <div class="flex items-center gap-2 text-orange-400 font-bold mb-1">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+              Risk Mismatch Warning Active
+            </div>
+            <p class="text-gray-300 text-[11px] leading-relaxed">
+              Declared aggressive risk appetite exceeds financial capacity. Vulnerable runway (&lt;3.0m) triggers automated -32pt safety deductions.
+            </p>
+          </div>
+        </div>
+
+        <!-- Interactive Sliders / Profile Controls -->
+        <div class="glass-panel rounded-2xl p-5 border border-gray-800 space-y-4">
+          <h3 class="text-sm font-bold tracking-wide uppercase text-gray-300 flex items-center gap-2">
+            <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+            Household Balance Sheet
+          </h3>
+
+          <!-- Monthly Income -->
+          <div>
+            <div class="flex justify-between text-xs mb-1">
+              <span class="text-gray-400">Monthly Income</span>
+              <span class="font-semibold text-gray-200" id="val-income">₹85,000</span>
+            </div>
+            <input type="range" id="input-income" min="20000" max="300000" step="5000" value="85000" class="w-full">
+          </div>
+
+          <!-- Monthly Living Expenses -->
+          <div>
+            <div class="flex justify-between text-xs mb-1">
+              <span class="text-gray-400">Monthly Expenses</span>
+              <span class="font-semibold text-gray-200" id="val-expenses">₹40,000</span>
+            </div>
+            <input type="range" id="input-expenses" min="10000" max="200000" step="2000" value="40000" class="w-full">
+          </div>
+
+          <!-- Existing Debt EMI -->
+          <div>
+            <div class="flex justify-between text-xs mb-1">
+              <span class="text-gray-400">Existing Debt EMI</span>
+              <span class="font-semibold text-gray-200" id="val-debt-emi">₹5,000</span>
+            </div>
+            <input type="range" id="input-debt-emi" min="0" max="100000" step="2500" value="5000" class="w-full">
+          </div>
+
+          <!-- Liquid Savings -->
+          <div>
+            <div class="flex justify-between text-xs mb-1">
+              <span class="text-gray-400">Current Liquid Savings</span>
+              <span class="font-semibold text-gray-200" id="val-savings">₹1,20,000</span>
+            </div>
+            <input type="range" id="input-savings" min="0" max="1000000" step="10000" value="120000" class="w-full">
+          </div>
+
+          <!-- Target Horizon -->
+          <div class="pt-2 border-t border-gray-800">
+            <div class="flex justify-between text-xs mb-1">
+              <span class="text-gray-400">Target Horizon ($T_u$)</span>
+              <span class="font-semibold text-blue-400" id="val-horizon">36 Months (3.0y)</span>
+            </div>
+            <input type="range" id="input-horizon" min="3" max="84" step="3" value="36" class="w-full">
+          </div>
+
+          <!-- Risk Tolerance -->
+          <div class="pt-2">
+            <label class="block text-xs text-gray-400 mb-1">Declared Risk Appetite</label>
+            <select id="select-risk" class="w-full text-xs rounded-lg bg-gray-900 border border-gray-700 px-3 py-2 text-gray-200 focus:outline-none focus:border-blue-500">
+              <option value="CONSERVATIVE">Conservative (Safety Priority)</option>
+              <option value="MODERATE" selected>Moderate (Balanced Growth)</option>
+              <option value="AGGRESSIVE">Aggressive (Maximum Return Seeking)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Document Intelligence Quick Access Card -->
+        <div class="glass-panel rounded-2xl p-5 border border-blue-500/30 bg-blue-950/20 space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs font-bold tracking-wide uppercase text-blue-300 flex items-center gap-2">
+              <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              Document Intelligence
+            </h3>
+            <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/40">Audit Ready</span>
+          </div>
+          <p class="text-xs text-gray-300 leading-relaxed">
+            Upload loan terms or policy PDF to extract contractual clauses, uncover undisclosed conditions, and verify evidence citations.
+          </p>
+          <button id="sidebar-doc-auditor-btn" class="w-full flex items-center justify-center gap-2 py-2.5 px-3 text-xs font-bold rounded-lg bg-blue-600 hover:bg-blue-500 text-white shadow-md shadow-blue-600/30 transition-all">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+            Audit a Product Document
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Suitability Intelligence Leaderboard (8 Cols) -->
+      <div class="lg:col-span-8 space-y-4">
+
+        <!-- Category Selector Tabs -->
+        <div class="flex items-center justify-between flex-wrap gap-2 pb-2 border-b border-gray-800">
+          <div class="flex items-center gap-1.5 p-1 rounded-xl bg-gray-900 border border-gray-800">
+            <button class="category-tab px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-blue-600 text-white transition-all" data-category="LOAN">
+              Loans (12)
+            </button>
+            <button class="category-tab px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-gray-800 text-gray-300 hover:text-white transition-all" data-category="INVESTMENT">
+              Investments (10)
+            </button>
+            <button class="category-tab px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-gray-800 text-gray-300 hover:text-white transition-all" data-category="SAVINGS">
+              Savings / FDs (8)
+            </button>
+            <button class="category-tab px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-gray-800 text-gray-300 hover:text-white transition-all" data-category="ALL">
+              All Products (30)
+            </button>
+          </div>
+
+          <div class="text-xs text-gray-400 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            Ranked by Explainable Suitability ($S \in [0, 100]$)
+          </div>
+        </div>
+
+        <!-- Products Leaderboard List -->
+        <div id="products-leaderboard" class="space-y-3">
+          <!-- Populated dynamically by app.js -->
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Deep Dive Explainability Modal -->
+  <div id="explain-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
+    <div id="modal-backdrop" class="fixed inset-0 bg-black/75 backdrop-blur-sm"></div>
+    <div class="relative w-full max-w-2xl bg-gray-900 border border-gray-800 rounded-2xl shadow-2xl p-6 z-10 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-start justify-between border-b border-gray-800 pb-4 mb-4">
+        <div>
+          <span class="text-xs font-semibold uppercase tracking-wider text-blue-400">Explainable Reasoning Audit Trace</span>
+          <h2 class="text-lg font-bold text-white mt-0.5" id="modal-product-title">Apex Easy Personal Loan</h2>
+        </div>
+        <div class="flex items-center gap-3">
+          <span id="modal-score-badge" class="px-3 py-1 rounded-full text-sm font-bold bg-blue-500/20 text-blue-400 border border-blue-500/40">
+            84.0 / 100
+          </span>
+          <button id="modal-close-btn" class="p-1 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Narrative Summary -->
+      <div class="p-3.5 rounded-xl bg-gray-950/60 border border-gray-800 text-xs text-gray-300 leading-relaxed mb-4" id="modal-narrative-text">
+        <!-- Narrative populated by app.js -->
+      </div>
+
+      <!-- Mathematical Formulation Trace -->
+      <div class="mb-4">
+        <h4 class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">Deterministic Math Formulation</h4>
+        <div class="p-3 rounded-lg bg-black/40 font-mono text-xs text-blue-300 border border-gray-800 overflow-x-auto" id="modal-trace-text">
+          <!-- Trace string populated by app.js -->
+        </div>
+      </div>
+
+      <!-- 5 Dimensions Breakdown -->
+      <div class="mb-4">
+        <h4 class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">5-Dimensional Suitability Breakdown</h4>
+        <div id="modal-dimensions-list" class="space-y-2">
+          <!-- Dimensions populated by app.js -->
+        </div>
+      </div>
+
+      <!-- Penalties Subtracted -->
+      <div>
+        <h4 class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">Non-Headline Penalties & Flags</h4>
+        <div id="modal-penalties-list" class="space-y-2">
+          <!-- Penalties populated by app.js -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Side-by-Side Comparison Modal -->
+  <div id="compare-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
+    <div id="compare-modal-backdrop" class="fixed inset-0 bg-black/75 backdrop-blur-sm"></div>
+    <div class="relative w-full max-w-4xl bg-gray-900 border border-gray-800 rounded-2xl shadow-2xl p-6 z-10 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-start justify-between border-b border-gray-800 pb-4 mb-4">
+        <div>
+          <span class="text-xs font-semibold uppercase tracking-wider text-blue-400">Side-by-Side Suitability & Evidence Comparison</span>
+          <h2 class="text-lg font-bold text-white mt-0.5">Winner: <span id="comp-winner-name" class="text-emerald-400">Loan B</span></h2>
+        </div>
+        <div class="flex items-center gap-3">
+          <span id="comp-delta" class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">
+            +60.0 pts advantage
+          </span>
+          <button id="compare-modal-close-btn" class="p-1 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Comparative Summary -->
+      <div class="p-4 rounded-xl bg-blue-950/30 border border-blue-500/30 text-xs text-gray-200 leading-relaxed mb-5" id="comp-narrative">
+      </div>
+
+      <!-- TCOB Visual Breakdown (For Loans) -->
+      <div id="comp-tcob-breakdown" class="mb-5">
+        <h4 class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">Total Cost of Borrowing (TCOB) Component Breakdown</h4>
+        <div class="grid grid-cols-2 gap-4">
+          <!-- Product A -->
+          <div class="p-4 rounded-xl bg-gray-950 border border-gray-800">
+            <div class="font-bold text-sm text-gray-200 mb-1" id="comp-prod-a-name">Loan A (8.5% Headline)</div>
+            <div class="text-2xl font-black text-rose-400 mb-3" id="tcob-a-total">₹1,28,762</div>
+            <div class="space-y-1.5 text-xs text-gray-400 border-t border-gray-800 pt-2">
+              <div class="flex justify-between"><span>Amortized Interest:</span> <span id="tcob-a-interest" class="font-semibold text-gray-200">₹1,06,111</span></div>
+              <div class="flex justify-between"><span>Upfront Processing Fee:</span> <span id="tcob-a-fee" class="font-semibold text-gray-200">₹8,000</span></div>
+              <div class="flex justify-between"><span>Prepayment Exit Penalty:</span> <span id="tcob-a-penalty" class="font-semibold text-rose-400">₹14,651</span></div>
+              <div class="flex justify-between pt-1 font-bold text-gray-300"><span>Suitability Score:</span> <span id="comp-prod-a-score">24.0 / 100</span></div>
+            </div>
+          </div>
+
+          <!-- Product B -->
+          <div class="p-4 rounded-xl bg-gray-950 border border-emerald-500/40 bg-emerald-950/10">
+            <div class="font-bold text-sm text-emerald-400 mb-1" id="comp-prod-b-name">Loan B (9.2% Headline)</div>
+            <div class="text-2xl font-black text-emerald-400 mb-3" id="tcob-b-total">₹76,072</div>
+            <div class="space-y-1.5 text-xs text-gray-400 border-t border-gray-800 pt-2">
+              <div class="flex justify-between"><span>Amortized Interest:</span> <span id="tcob-b-interest" class="font-semibold text-gray-200">₹74,072</span></div>
+              <div class="flex justify-between"><span>Upfront Processing Fee:</span> <span id="tcob-b-fee" class="font-semibold text-gray-200">₹2,000</span></div>
+              <div class="flex justify-between"><span>Prepayment Exit Penalty:</span> <span id="tcob-b-penalty" class="font-semibold text-emerald-400">₹0 (Zero Penalty)</span></div>
+              <div class="flex justify-between pt-1 font-bold text-emerald-300"><span>Suitability Score:</span> <span id="comp-prod-b-score">84.0 / 100</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Comparative Evidence & Disclosure Table -->
+      <div class="mb-5">
+        <h4 class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">Evidence Grounding & Disclosure Comparison</h4>
+        <div class="overflow-x-auto rounded-xl border border-gray-800">
+          <table class="w-full text-xs text-left text-gray-300">
+            <thead class="text-[11px] uppercase bg-gray-950/80 text-gray-400 border-b border-gray-800">
+              <tr>
+                <th class="px-3.5 py-2.5">Attribute Dimension</th>
+                <th class="px-3.5 py-2.5" id="comp-table-head-a">Loan A</th>
+                <th class="px-3.5 py-2.5" id="comp-table-head-b">Loan B</th>
+                <th class="px-3.5 py-2.5">Audit Observation</th>
+              </tr>
+            </thead>
+            <tbody id="comp-evidence-tbody" class="divide-y divide-gray-800/60 bg-gray-900/40">
+              <!-- Dynamically populated by app.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Key Takeaways -->
+      <div>
+        <h4 class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">Key Takeaways & Regulatory Advice</h4>
+        <ul id="comp-takeaways" class="space-y-2">
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEW: Comprehensive Document Evidence & Suitability Auditor Modal -->
+  <div id="document-modal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 hidden">
+    <div id="document-modal-backdrop" class="fixed inset-0 bg-black/80 backdrop-blur-sm"></div>
+    <div class="relative w-full max-w-5xl bg-[#0e1424] border border-gray-800 rounded-2xl shadow-2xl p-5 sm:p-7 z-10 max-h-[92vh] overflow-y-auto">
+
+      <!-- Modal Header -->
+      <div class="flex items-start justify-between border-b border-gray-800 pb-4 mb-5">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-blue-500/20 border border-blue-500/30 text-blue-400 flex items-center justify-center font-bold">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h2 class="text-lg font-bold text-white">Document Evidence & Suitability Auditor</h2>
+              <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">Contract Grounded</span>
+            </div>
+            <p class="text-xs text-gray-400 mt-0.5">
+              Extract non-headline terms, verify page & section citations, uncover missing disclosures, and test household suitability.
+            </p>
+          </div>
+        </div>
+        <button id="document-modal-close-btn" class="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <!-- Document Ingestion Dropzone & Demo Presets -->
+      <div class="mb-6 space-y-4">
+        <!-- PDF Dropzone -->
+        <div id="doc-dropzone" class="dropzone rounded-xl p-5 sm:p-6 text-center cursor-pointer hover:bg-gray-900/60 transition-all border-dashed">
+          <input type="file" id="doc-file-input" accept=".pdf,.txt" class="hidden">
+          <div class="flex flex-col items-center justify-center gap-2">
+            <div class="w-12 h-12 rounded-full bg-blue-500/10 text-blue-400 flex items-center justify-center">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+            </div>
+            <div class="text-sm font-semibold text-gray-200">
+              <span class="text-blue-400 hover:underline">Click to browse product PDF</span> or drag and drop here
+            </div>
+            <p class="text-xs text-gray-500">
+              Supports loan sanction letters, key information factsheets (KFS), terms & conditions, or policy brochures.
+            </p>
+            <div id="selected-file-info" class="hidden mt-2 px-3 py-1.5 rounded-lg bg-blue-950/60 border border-blue-500/40 text-xs text-blue-300 font-medium">
+              <!-- Populated when file selected -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Pre-loaded Representative Demo Contracts -->
+        <div class="p-3.5 rounded-xl bg-gray-950/50 border border-gray-800">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold text-gray-300 uppercase tracking-wider flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+              Or Select Verified Representative Document for Demo:
+            </span>
+            <span class="text-[10px] text-gray-500">Instant PDF Extraction</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
+            <button class="doc-preset-btn text-left p-2.5 rounded-lg border border-rose-500/40 bg-rose-950/20 hover:bg-rose-950/40 text-xs transition-all" data-doc-id="DOC_LOAN_TRAP_A">
+              <div class="font-bold text-gray-200 flex items-center justify-between">
+                <span>Apex Easy Loan T&C</span>
+                <span class="text-[9px] px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 font-mono">Page 4</span>
+              </div>
+              <div class="text-[11px] text-rose-300/80 mt-1">4.5% Exit Penalty + ₹8k fee</div>
+            </button>
+
+            <button class="doc-preset-btn text-left p-2.5 rounded-lg border border-emerald-500/40 bg-emerald-950/20 hover:bg-emerald-950/40 text-xs transition-all" data-doc-id="DOC_LOAN_FLEXI_B">
+              <div class="font-bold text-gray-200 flex items-center justify-between">
+                <span>FlexiClear Agreement</span>
+                <span class="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono">Page 2</span>
+              </div>
+              <div class="text-[11px] text-emerald-300/80 mt-1">Zero Penalty, transparent ₹2k</div>
+            </button>
+
+            <button class="doc-preset-btn text-left p-2.5 rounded-lg border border-amber-500/40 bg-amber-950/20 hover:bg-amber-950/40 text-xs transition-all" data-doc-id="DOC_LOAN_UNDISCLOSED">
+              <div class="font-bold text-gray-200 flex items-center justify-between">
+                <span>Standard Retail Loan</span>
+                <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono">Missing</span>
+              </div>
+              <div class="text-[11px] text-amber-300/80 mt-1">Prepayment clause NOT FOUND</div>
+            </button>
+
+            <button class="doc-preset-btn text-left p-2.5 rounded-lg border border-indigo-500/40 bg-indigo-950/20 hover:bg-indigo-950/40 text-xs transition-all" data-doc-id="DOC_INSURANCE_STAR">
+              <div class="font-bold text-gray-200 flex items-center justify-between">
+                <span>Care Health Policy</span>
+                <span class="text-[9px] px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 font-mono">PS-08</span>
+              </div>
+              <div class="text-[11px] text-indigo-300/80 mt-1">Room rent cap & 20% co-pay</div>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Analysis Stepper Tracker -->
+      <div id="doc-analysis-stepper" class="mb-6 p-3.5 rounded-xl bg-gray-950 border border-gray-800 flex items-center justify-between flex-wrap gap-2 text-xs">
+        <div class="flex items-center gap-2 text-emerald-400 font-semibold" id="step-1">
+          <span class="w-5 h-5 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-[10px]">✓</span>
+          <span>Document Loaded</span>
+        </div>
+        <span class="text-gray-600 hidden sm:inline">→</span>
+        <div class="flex items-center gap-2 text-emerald-400 font-semibold" id="step-2">
+          <span class="w-5 h-5 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-[10px]">✓</span>
+          <span>Clauses Tokenized</span>
+        </div>
+        <span class="text-gray-600 hidden sm:inline">→</span>
+        <div class="flex items-center gap-2 text-emerald-400 font-semibold" id="step-3">
+          <span class="w-5 h-5 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-[10px]">✓</span>
+          <span>Attributes Grounded</span>
+        </div>
+        <span class="text-gray-600 hidden sm:inline">→</span>
+        <div class="flex items-center gap-2 text-emerald-400 font-semibold" id="step-4">
+          <span class="w-5 h-5 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-[10px]">✓</span>
+          <span>Omissions & Coverage Audited</span>
+        </div>
+      </div>
+
+      <!-- Document Results View (Populated upon selection/upload) -->
+      <div id="doc-results-container" class="space-y-6">
+
+        <!-- Top Section: Evidence Coverage Widget & Suitability Summary -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+
+          <!-- Evidence Coverage Card (5 cols) -->
+          <div class="md:col-span-5 p-5 rounded-xl bg-gray-950 border border-gray-800 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold uppercase tracking-wider text-gray-400">Evidence Coverage</span>
+                <span id="coverage-status-tag" class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                  HIGH COMPLETENESS
+                </span>
+              </div>
+              <div class="flex items-baseline gap-2 mt-1">
+                <span class="text-3xl font-black text-white" id="coverage-percentage">87.5%</span>
+                <span class="text-xs text-gray-400 font-semibold" id="coverage-ratio">14 of 16 attributes verified</span>
+              </div>
+
+              <!-- Segmented Progress Bar -->
+              <div class="w-full bg-gray-800 rounded-full h-2.5 mt-3 overflow-hidden">
+                <div id="coverage-bar" class="h-2.5 rounded-full bg-emerald-500 transition-all duration-500" style="width: 87.5%"></div>
+              </div>
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-gray-800/80">
+              <p class="text-[11px] text-gray-400 leading-relaxed">
+                <strong class="text-gray-300">Auditor Definition:</strong> Evidence Coverage measures the proportion of mandatory terms verified in the supplied document. It is an index of <span class="text-blue-400 font-medium">disclosure completeness</span>, not recommendation confidence.
+              </p>
+            </div>
+          </div>
+
+          <!-- Document Suitability Alignment Card (7 cols) -->
+          <div class="md:col-span-7 p-5 rounded-xl bg-blue-950/20 border border-blue-500/30 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                  <span class="text-xs font-bold uppercase tracking-wider text-blue-300">Contract Suitability Verdict</span>
+                  <span id="doc-suitability-tier" class="px-2 py-0.5 text-[10px] font-bold rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                    GOOD FIT (84 / 100)
+                  </span>
+                </div>
+                <span class="text-xs text-gray-400" id="doc-contract-name">FlexiClear Transparent Loan</span>
+              </div>
+              <p class="text-xs text-gray-200 mt-1.5 leading-relaxed" id="doc-verdict-narrative">
+                Contract disclosures confirm zero prepayment penalties, perfectly suiting Arjun's planned 3-year early closure.
+              </p>
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-blue-900/40 grid grid-cols-3 gap-2 text-center text-xs">
+              <div class="p-2 rounded bg-gray-900/60 border border-gray-800">
+                <div class="text-[10px] text-gray-400">Headline Rate</div>
+                <div class="font-bold text-gray-100" id="doc-stat-rate">9.2%</div>
+              </div>
+              <div class="p-2 rounded bg-gray-900/60 border border-gray-800">
+                <div class="text-[10px] text-gray-400">Exit / Foreclosure</div>
+                <div class="font-bold text-emerald-400" id="doc-stat-penalty">0.0% (Found)</div>
+              </div>
+              <div class="p-2 rounded bg-gray-900/60 border border-gray-800">
+                <div class="text-[10px] text-gray-400">Upfront Costs</div>
+                <div class="font-bold text-gray-100" id="doc-stat-fee">₹2,000</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Middle Section: Extracted Information Table & Interactive Evidence Drawer -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+
+          <!-- Extracted Information Table (8 cols) -->
+          <div class="lg:col-span-8 space-y-3">
+            <div class="flex items-center justify-between flex-wrap gap-2">
+              <h3 class="text-xs font-bold tracking-wider uppercase text-gray-300 flex items-center gap-2">
+                <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                Extracted Contractual Attributes & Evidence Grounding
+              </h3>
+              <span class="text-[11px] text-gray-400">Click any row to inspect verbatim citation</span>
+            </div>
+
+            <div class="overflow-x-auto rounded-xl border border-gray-800 bg-gray-950">
+              <table class="w-full text-xs text-left text-gray-300">
+                <thead class="text-[11px] uppercase bg-gray-900 text-gray-400 border-b border-gray-800">
+                  <tr>
+                    <th class="px-3 py-2.5">Attribute</th>
+                    <th class="px-3 py-2.5">Extracted Value</th>
+                    <th class="px-3 py-2.5">Disclosure Status</th>
+                    <th class="px-3 py-2.5">Source Citation</th>
+                    <th class="px-3 py-2.5 text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="extracted-attributes-tbody" class="divide-y divide-gray-800/60">
+                  <!-- Populated dynamically by app.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Interactive Evidence Citation Drawer (4 cols) -->
+          <div class="lg:col-span-4 space-y-3">
+            <h3 class="text-xs font-bold tracking-wider uppercase text-gray-300 flex items-center gap-2">
+              <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+              Evidence Citation Inspector
+            </h3>
+
+            <div id="evidence-inspector-card" class="p-4 rounded-xl bg-gray-950 border border-gray-800 space-y-3 text-xs">
+              <div class="flex items-center justify-between border-b border-gray-800 pb-2">
+                <span class="font-bold text-gray-200" id="inspect-attribute-title">Prepayment Penalty</span>
+                <span id="inspect-status-badge" class="px-2 py-0.5 text-[10px] font-bold rounded badge-found">FOUND</span>
+              </div>
+
+              <div>
+                <span class="text-[10px] text-gray-400 uppercase font-semibold">Extracted Value</span>
+                <div class="text-base font-black text-gray-100 mt-0.5" id="inspect-value">4.5% on outstanding</div>
+              </div>
+
+              <div>
+                <span class="text-[10px] text-gray-400 uppercase font-semibold">Document Location</span>
+                <div class="text-xs text-blue-400 font-mono mt-0.5" id="inspect-location">Terms & Conditions — Page 4, Section 6.2</div>
+              </div>
+
+              <div>
+                <span class="text-[10px] text-gray-400 uppercase font-semibold">Verbatim Citation Excerpt</span>
+                <div class="evidence-quote rounded-lg mt-1 text-[11px] leading-relaxed" id="inspect-quote">
+                  "In the event of foreclosure or full prepayment prior to 36 completed EMIs, a prepayment penalty of 4.5% plus applicable GST shall be charged on the remaining principal."
+                </div>
+              </div>
+
+              <div class="pt-2 border-t border-gray-800">
+                <span class="text-[10px] text-gray-400 uppercase font-semibold">Auditor Assessment</span>
+                <p class="text-[11px] text-gray-300 mt-0.5 leading-relaxed" id="inspect-note">
+                  Material lock-in fee. Triggers an estimated ₹14,651 exit penalty under Arjun's 3-year repayment timeline.
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Bottom Section: Missing Information & Provider Verification Checklist -->
+        <div class="p-5 rounded-xl bg-amber-950/20 border border-amber-500/30 space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div class="w-6 h-6 rounded-md bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-xs">
+                ⚠
+              </div>
+              <h4 class="text-xs font-bold uppercase tracking-wider text-amber-300">
+                What Should You Verify Before Signing? (Undisclosed / Ambiguous Attributes)
+              </h4>
+            </div>
+            <span class="text-[10px] text-amber-400/80 font-semibold" id="missing-count-label">2 Attributes Require Clarification</span>
+          </div>
+
+          <p class="text-xs text-gray-300 leading-relaxed">
+            AlignFin does not assume "not found" means zero cost. The following conditions could not be verified in the supplied document and require direct provider confirmation:
+          </p>
+
+          <div id="verification-checklist-container" class="space-y-2 pt-1">
+            <!-- Populated dynamically by app.js -->
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
 </html>
