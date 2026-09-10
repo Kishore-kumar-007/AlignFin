@@ -133,7 +133,7 @@ export default function App() {
       if (prev.includes(productId)) {
         return prev.filter(id => id !== productId);
       } else {
-        if (prev.length >= 3) {
+        if (prev.length >= 5) {
           return [...prev.slice(1), productId];
         }
         return [...prev, productId];

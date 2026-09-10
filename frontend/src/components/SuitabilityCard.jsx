@@ -159,13 +159,13 @@ export default function SuitabilityCard({
 
       {/* Structured Pros & Constraints Chips */}
       <div className="pt-2 pb-3 space-y-1.5 border-t border-slate-800/60 my-2">
-        {result.pros.slice(0, 2).map((pro, i) => (
+        {result.pros.map((pro, i) => (
           <div key={i} className="flex items-start gap-2 text-xs text-slate-300">
             <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 shrink-0 mt-0.5" />
             <span className="leading-tight">{pro}</span>
           </div>
         ))}
-        {result.penalties.slice(0, 2).map((pen, i) => (
+        {result.penalties.map((pen, i) => (
           <div key={i} className="flex items-start gap-2 text-xs text-rose-300/90 font-medium">
             <AlertTriangle className="h-3.5 w-3.5 text-rose-400 shrink-0 mt-0.5" />
             <span className="leading-tight">{pen.reason} (-{pen.penalty_points} pts)</span>

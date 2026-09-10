@@ -51,9 +51,9 @@ class ExplanationEngine:
             
         # Top Pros & Cons
         if result.pros:
-            lines.append("- **Key Strengths**: " + " | ".join(result.pros[:2]))
+            lines.append("- **Key Strengths**: " + " | ".join(result.pros))
         if result.cons:
-            lines.append("- **Watch-outs & Constraints**: " + " | ".join(result.cons[:2]))
+            lines.append("- **Watch-outs & Constraints**: " + " | ".join(result.cons))
             
         return "\n".join(lines)
 
