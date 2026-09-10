@@ -1,5 +1,5 @@
 // Use environment variable for production (Render), fallback to relative path for local proxy
-const API_BASE = import.meta.env.VITE_API_URL || '/api';
+export const API_BASE = import.meta.env.VITE_API_URL || '/api';
 
 export async function fetchPersonas() {
   const res = await fetch(`${API_BASE}/personas`);
