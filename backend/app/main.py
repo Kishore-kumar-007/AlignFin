@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from .database.db import init_db
-from .routers import personas, products, profile, evaluate, documents
+from .routers import personas, products, profile, evaluate, documents, auth
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -27,6 +27,7 @@ app.add_middleware(
 )
 
 # Register Routers
+app.include_router(auth.router)
 app.include_router(personas.router)
 app.include_router(products.router)
 app.include_router(profile.router)

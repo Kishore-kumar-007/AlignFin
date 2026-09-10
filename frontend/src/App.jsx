@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Header from './components/Header';
 import ProfileWizard from './components/ProfileWizard';
 import SuitabilityCard from './components/SuitabilityCard';
@@ -10,7 +11,8 @@ import {
   fetchProducts, 
   analyzeRisk, 
   fetchRecommendations, 
-  compareProducts 
+  compareProducts,
+  API_BASE
 } from './services/api';
 import { 
   Scale, 
@@ -25,58 +27,72 @@ import {
 } from 'lucide-react';
 
 export default function App() {
+  const navigate = useNavigate();
   const [personas, setPersonas] = useState([]);
-  const [selectedPersonaId, setSelectedPersonaId] = useState('persona-loan-trap');
+  const [selectedPersonaId, setSelectedPersonaId] = useState('');
   const [productsCatalog, setProductsCatalog] = useState([]);
   
   // User Profile State
-  const [profile, setProfile] = useState({
-    name: 'Rohan Sharma',
-    age: 24,
-    monthly_income: 35000,
-    monthly_expenses: 25000,
-    existing_debt_emi: 2000,
-    current_savings: 75000,
-    financial_goal: 'vehicle_purchase',
-    category_interest: 'loan',
-    target_amount: 200000,
-    target_horizon_months: 36,
-    risk_tolerance: 'moderate',
-    liquidity_importance: 'medium',
-    prepayment_preference: 'very_likely'
-  });
+  const [profile, setProfile] = useState(null);
 
   const [riskAnalysis, setRiskAnalysis] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
-  const [selectedForCompare, setSelectedForCompare] = useState(['loan-headline-bait', 'loan-flexi-fit']);
+  const [selectedForCompare, setSelectedForCompare] = useState([]);
   const [isComparing, setIsComparing] = useState(false);
   const [comparisonMatrix, setComparisonMatrix] = useState(null);
   const [inspectResult, setInspectResult] = useState(null);
   const [isCatalogOpen, setIsCatalogOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  
+  // Logout handler
+  const handleLogout = () => {
+    localStorage.removeItem('alignfin_token');
+    navigate('/login');
+  };
 
-  // Initial Load
+  // Initial Load & Auth Check
   useEffect(() => {
     async function init() {
       try {
+        const token = localStorage.getItem('alignfin_token');
+        if (!token) {
+          navigate('/login');
+          return;
+        }
+
+        // Fetch User Profile
+        const userRes = await fetch(`${API_BASE}/auth/me`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        if (!userRes.ok) {
+          localStorage.removeItem('alignfin_token');
+          navigate('/login');
+          return;
+        }
+
+        const userData = await userRes.json();
+        if (!userData.profile || Object.keys(userData.profile).length === 0) {
+          navigate('/onboarding');
+          return;
+        }
+
+        setProfile(userData.profile);
+
         const [personasData, productsData] = await Promise.all([
           fetchPersonas(),
           fetchProducts()
         ]);
         setPersonas(personasData);
         setProductsCatalog(productsData);
-        
-        if (personasData.length > 0) {
-          const defaultPersona = personasData[0];
-          setSelectedPersonaId(defaultPersona.id);
-          setProfile(defaultPersona.profile);
-        }
       } catch (err) {
         console.error('Initialization error:', err);
+      } finally {
+        setIsLoading(false);
       }
     }
     init();
-  }, []);
+  }, [navigate]);
 
   // Recalculate Risk and Recommendations on profile or category change
   const evaluateProfile = useCallback(async (currentProfile) => {
@@ -103,7 +119,11 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    evaluateProfile(profile);
+    if (!profile) return;
+    const handler = setTimeout(() => {
+      evaluateProfile(profile);
+    }, 500);
+    return () => clearTimeout(handler);
   }, [profile, evaluateProfile]);
 
   // Persona switch handler
@@ -141,7 +161,6 @@ export default function App() {
     });
   };
 
-  // Trigger Head-to-Head Compare Modal
   const handleRunComparison = async () => {
     if (selectedForCompare.length < 2) return;
     setIsLoading(true);
@@ -150,11 +169,19 @@ export default function App() {
       setComparisonMatrix(matrix);
       setIsComparing(true);
     } catch (err) {
-      console.error('Comparison error:', err);
+      console.error('Compare error:', err);
     } finally {
       setIsLoading(false);
     }
   };
+
+  if (isLoading || !profile) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+        <div className="text-emerald-500 font-bold animate-pulse text-lg">Loading Profile...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between selection:bg-emerald-500 selection:text-white">
@@ -171,42 +198,43 @@ export default function App() {
       {/* Main Container */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8 flex-1 w-full">
         
-        {/* Step 1: Financial Profile Wizard & Live Health Gauge */}
+        <div className="flex justify-end">
+          <button 
+            onClick={handleLogout}
+            className="text-xs font-bold text-rose-400 hover:text-rose-300 bg-rose-500/10 hover:bg-rose-500/20 px-4 py-2 rounded-lg transition"
+          >
+            Sign Out
+          </button>
+        </div>
+
+        {/* 1. Profile & Risk Context */}
         <section>
           <ProfileWizard
             profile={profile}
             onChangeProfile={setProfile}
-            riskAnalysis={riskAnalysis}
             onTriggerEvaluate={() => evaluateProfile(profile)}
             isEvaluating={isLoading}
           />
         </section>
 
-        {/* Step 2: Suitability Leaderboard & Recommendations Grid */}
+        {/* 2. Intelligent Leaderboard */}
         <section className="space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-slate-800">
             <div>
-              <div className="flex items-center gap-2">
-                <h2 className="text-lg font-extrabold text-white tracking-tight">
-                  Suitability Leaderboard & Ranked Products
-                </h2>
-                <span className="text-xs font-mono font-bold px-2 py-0.5 rounded-full bg-slate-800 text-emerald-400 border border-slate-700">
-                  {recommendations.length} Evaluated
-                </span>
-              </div>
-              <p className="text-xs text-slate-400">
-                Ranked by deterministic suitability score (0–100) accounting for horizon, secondary fees, and solvency buffer
-              </p>
+              <h2 className="text-2xl font-black text-white flex items-center gap-2">
+                <Sparkles className="h-6 w-6 text-emerald-400" />
+                Suitability Leaderboard
+              </h2>
+              <p className="text-sm text-slate-400 mt-0.5">Ranked explicitly for {profile.name}'s constraints.</p>
             </div>
-
-            {/* Compare Trigger Floating Button */}
+            
             {selectedForCompare.length >= 2 && (
               <button
                 onClick={handleRunComparison}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-extrabold text-xs shadow-lg shadow-emerald-500/20 transition transform active:scale-95 shrink-0"
+                className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black px-5 py-2.5 rounded-xl transition flex items-center gap-2 shadow-lg shadow-emerald-500/20 animate-in fade-in zoom-in duration-300"
               >
-                <Scale className="h-4 w-4 stroke-[2.5]" />
-                <span>Compare Selected ({selectedForCompare.length})</span>
+                <Scale className="h-5 w-5" />
+                Compare Selected ({selectedForCompare.length})
               </button>
             )}
           </div>
@@ -235,37 +263,18 @@ export default function App() {
         />
       )}
 
-      {inspectResult && (
-        <ExplainabilityDrawer
-          result={inspectResult}
-          profile={profile}
-          onClose={() => setInspectResult(null)}
-        />
-      )}
+      <ExplainabilityDrawer
+        result={inspectResult}
+        isOpen={!!inspectResult}
+        onClose={() => setInspectResult(null)}
+      />
 
       {isCatalogOpen && (
         <CatalogExplorer
           products={productsCatalog}
           onClose={() => setIsCatalogOpen(false)}
-          onSelectProductCategory={handleSelectCategory}
         />
       )}
-
-      {/* Footer & Hackathon Disclaimer */}
-      <footer className="border-t border-slate-800/80 bg-slate-900/60 py-6 text-center text-xs text-slate-500 space-y-2">
-        <div className="flex flex-wrap items-center justify-center gap-4 text-slate-400 font-medium">
-          <span>HACKNOVA’26 — 24H Hackathon</span>
-          <span>•</span>
-          <span>Team AlignFin</span>
-          <span>•</span>
-          <span>Knowledge Institute of Technology, Salem</span>
-          <span>•</span>
-          <span>PS-08: Financial Product Suitability Intelligence</span>
-        </div>
-        <p className="text-[11px] text-slate-500 max-w-2xl mx-auto px-4">
-          Disclaimer: AlignFin is a prototype decision-support & financial-literacy intelligence platform. Calculations are based on deterministic models and curated representative data. It does not constitute personalized financial advice.
-        </p>
-      </footer>
     </div>
   );
 }

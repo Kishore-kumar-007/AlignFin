@@ -244,6 +244,43 @@ export default function ComparisonView({ matrix, onClose, onOpenExplain }) {
                   </tr>
                 </>
               )}
+
+              {category === 'savings' && (
+                <>
+                  <tr>
+                    <td className="p-3 font-semibold text-slate-400">Liquidity Rating</td>
+                    {results.map((r) => (
+                      <td key={r.product.id} className={`p-3 font-bold uppercase ${r.product.liquidity_rating === 'high' ? 'text-emerald-400' : r.product.liquidity_rating === 'medium' ? 'text-amber-400' : 'text-rose-400'}`}>
+                        {r.product.liquidity_rating}
+                      </td>
+                    ))}
+                  </tr>
+                  <tr>
+                    <td className="p-3 font-semibold text-slate-400">Lock-In Period</td>
+                    {results.map((r) => (
+                      <td key={r.product.id} className={`p-3 font-bold ${r.product.lock_in_months > 0 ? 'text-amber-400' : 'text-emerald-400'}`}>
+                        {r.product.lock_in_months} Months
+                      </td>
+                    ))}
+                  </tr>
+                  <tr>
+                    <td className="p-3 font-semibold text-slate-400">Premature Withdrawal Penalty</td>
+                    {results.map((r) => (
+                      <td key={r.product.id} className={`p-3 font-bold ${r.product.prepayment_penalty_pct > 0 ? 'text-rose-400' : 'text-emerald-400'}`}>
+                        {r.product.prepayment_penalty_pct}%
+                      </td>
+                    ))}
+                  </tr>
+                  <tr>
+                    <td className="p-3 font-semibold text-slate-400">Guaranteed Maturity Value</td>
+                    {results.map((r) => (
+                      <td key={r.product.id} className="p-3 font-mono font-extrabold text-sm text-emerald-400">
+                        ₹{r.secondary_cost_impact.maturity_value?.toLocaleString('en-IN')}
+                      </td>
+                    ))}
+                  </tr>
+                </>
+              )}
             </tbody>
           </table>
         </div>
