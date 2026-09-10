@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field
 from typing import Literal, Optional, List, Dict, Any
+from .evidence import EvidenceItem
 
 class Product(BaseModel):
     id: str
@@ -30,3 +31,7 @@ class Product(BaseModel):
     key_features: List[str] = Field(default_factory=list)
     secondary_conditions: List[str] = Field(default_factory=list)
     badge: Optional[str] = None # e.g. "Headline Bait", "Flexi Choice", "Safe Anchor"
+    
+    # Evidence Tracking (Document Intelligence)
+    evidence_map: Dict[str, EvidenceItem] = Field(default_factory=dict, description="Maps field names to their extraction evidence")
+    evidence_coverage_pct: float = Field(default=0.0, description="Percentage of key fields backed by evidence")

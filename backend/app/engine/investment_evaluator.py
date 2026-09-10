@@ -220,6 +220,32 @@ class InvestmentSuitabilityEvaluator:
             )
             cons.append(f"Exit load penalty of ₹{growth_summary['exit_load_deducted']:,.0f} on early exit.")
             
+        # Penalty 4: Missing Critical Document Evidence
+        missing_evidence_penalty = 0.0
+        missing_evidence_reasons = []
+        
+        exit_evidence = product.evidence_map.get("exit_load_pct")
+        if exit_evidence and exit_evidence.status == "NOT_FOUND":
+            missing_evidence_penalty += 12.0
+            missing_evidence_reasons.append("Exit load is NOT explicitly stated. Do not assume 0%.")
+            cons.append("Missing exit load information.")
+            
+        expense_evidence = product.evidence_map.get("expense_ratio_pct")
+        if expense_evidence and expense_evidence.status == "NOT_FOUND":
+            missing_evidence_penalty += 12.0
+            missing_evidence_reasons.append("Expense ratio/management fee is NOT found. This is a massive red flag.")
+            cons.append("Missing expense ratio information.")
+            
+        if missing_evidence_penalty > 0:
+            penalties.append(
+                PenaltyItem(
+                    title="Missing Critical Document Evidence",
+                    penalty_points=missing_evidence_penalty,
+                    reason=" | ".join(missing_evidence_reasons),
+                    severity="warning"
+                )
+            )
+            reasoning.append(f"Evidence Missing: {len(missing_evidence_reasons)} critical fields were not found in the uploaded document. Avoid hidden traps.")
         # Pros
         if product.risk_level == "moderate" and profile.risk_tolerance == "moderate":
             pros.append("Balanced risk-reward profile ideally matches your moderate risk appetite.")

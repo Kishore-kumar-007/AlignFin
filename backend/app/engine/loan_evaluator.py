@@ -243,6 +243,33 @@ class LoanSuitabilityEvaluator:
             cons.append(f"Brings monthly debt obligations to an elevated {new_dti_pct:.1f}% of income.")
             reasoning.append(f"Solvency Strain: Monthly EMI of ₹{emi:,.0f} limits financial flexibility.")
             
+        # Penalty 4: Missing Critical Document Evidence
+        missing_evidence_penalty = 0.0
+        missing_evidence_reasons = []
+        
+        prep_evidence = product.evidence_map.get("prepayment_penalty_pct")
+        if prep_evidence and prep_evidence.status == "NOT_FOUND":
+            missing_evidence_penalty += 15.0
+            missing_evidence_reasons.append("Prepayment penalty is NOT explicitly mentioned in the document. Do not assume it is 0%.")
+            cons.append("Missing information on prepayment penalties.")
+            
+        proc_evidence = product.evidence_map.get("processing_fee_pct")
+        if proc_evidence and proc_evidence.status == "NOT_FOUND":
+            missing_evidence_penalty += 10.0
+            missing_evidence_reasons.append("Processing fee is NOT explicitly mentioned. Providers often hide this.")
+            cons.append("Missing information on processing fees.")
+            
+        if missing_evidence_penalty > 0:
+            penalties.append(
+                PenaltyItem(
+                    title="Missing Critical Document Evidence",
+                    penalty_points=missing_evidence_penalty,
+                    reason=" | ".join(missing_evidence_reasons),
+                    severity="warning"
+                )
+            )
+            reasoning.append(f"Evidence Missing: {len(missing_evidence_reasons)} critical fields were not found in the uploaded document. Avoid hidden traps.")
+            
         # Pros
         if product.prepayment_penalty_pct == 0:
             pros.append("Zero prepayment foreclosure penalty allows penalty-free early payoff anytime.")

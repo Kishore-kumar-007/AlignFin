@@ -40,6 +40,8 @@ def init_db():
         key_features TEXT,
         secondary_conditions TEXT,
         badge TEXT,
+        evidence_json TEXT,
+        evidence_coverage_pct REAL DEFAULT 0,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
     """)
@@ -72,8 +74,8 @@ def init_db():
                 lock_in_months, processing_fee_flat, processing_fee_pct,
                 prepayment_penalty_pct, exit_load_pct, expense_ratio_pct,
                 risk_level, liquidity_rating, tax_status, key_features,
-                secondary_conditions, badge
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                secondary_conditions, badge, evidence_json, evidence_coverage_pct
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (
                 p["id"], p["name"], p["provider"], p["category"], p["headline_rate"], p["headline_label"],
                 p["min_amount"], p["max_amount"], p.get("min_tenure_months", 12), p.get("max_tenure_months", 84),
@@ -82,7 +84,8 @@ def init_db():
                 p["risk_level"], p["liquidity_rating"], p.get("tax_status", "taxable"),
                 json.dumps(p.get("key_features", [])),
                 json.dumps(p.get("secondary_conditions", [])),
-                p.get("badge")
+                p.get("badge"),
+                json.dumps({}), 0.0
             ))
         conn.commit()
     conn.close()
@@ -102,6 +105,7 @@ def get_all_products(category: Optional[str] = None) -> List[Product]:
         d = dict(r)
         d["key_features"] = json.loads(d["key_features"]) if d["key_features"] else []
         d["secondary_conditions"] = json.loads(d["secondary_conditions"]) if d["secondary_conditions"] else []
+        d["evidence_map"] = json.loads(d["evidence_json"]) if d.get("evidence_json") else {}
         products.append(Product(**d))
     return products
 
@@ -116,4 +120,5 @@ def get_product_by_id(product_id: str) -> Optional[Product]:
     d = dict(row)
     d["key_features"] = json.loads(d["key_features"]) if d["key_features"] else []
     d["secondary_conditions"] = json.loads(d["secondary_conditions"]) if d["secondary_conditions"] else []
+    d["evidence_map"] = json.loads(d["evidence_json"]) if d.get("evidence_json") else {}
     return Product(**d)

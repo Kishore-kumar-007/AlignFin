@@ -1,4 +1,5 @@
-const API_BASE = '/api';
+// Use environment variable for production (Render), fallback to relative path for local proxy
+const API_BASE = import.meta.env.VITE_API_URL || '/api';
 
 export async function fetchPersonas() {
   const res = await fetch(`${API_BASE}/personas`);
@@ -40,5 +41,23 @@ export async function compareProducts(profile, productIds) {
     body: JSON.stringify({ profile, product_ids: productIds })
   });
   if (!res.ok) throw new Error('Failed to generate product comparison');
+  return res.json();
+}
+
+export async function uploadDocument(file) {
+  const formData = new FormData();
+  formData.append('file', file);
+  
+  const res = await fetch(`${API_BASE}/documents/extract`, {
+    method: 'POST',
+    body: formData
+    // Note: Do not set Content-Type header manually when sending FormData, 
+    // the browser sets it automatically with the boundary.
+  });
+  
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({}));
+    throw new Error(errorData.detail || 'Failed to extract document');
+  }
   return res.json();
 }

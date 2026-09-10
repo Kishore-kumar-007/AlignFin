@@ -184,6 +184,32 @@ class SavingsSuitabilityEvaluator:
             )
             cons.append(f"{product.prepayment_penalty_pct}% penalty charged on early premature withdrawal.")
             
+        # Penalty 3: Missing Critical Document Evidence
+        missing_evidence_penalty = 0.0
+        missing_evidence_reasons = []
+        
+        penalty_evidence = product.evidence_map.get("prepayment_penalty_pct")
+        if penalty_evidence and penalty_evidence.status == "NOT_FOUND":
+            missing_evidence_penalty += 10.0
+            missing_evidence_reasons.append("Premature withdrawal penalty rate is NOT explicitly stated.")
+            cons.append("Missing premature penalty information.")
+            
+        lockin_evidence = product.evidence_map.get("lock_in_months")
+        if lockin_evidence and lockin_evidence.status == "NOT_FOUND":
+            missing_evidence_penalty += 12.0
+            missing_evidence_reasons.append("Lock-in period is NOT found. Do not assume full liquidity.")
+            cons.append("Missing lock-in information.")
+            
+        if missing_evidence_penalty > 0:
+            penalties.append(
+                PenaltyItem(
+                    title="Missing Critical Document Evidence",
+                    penalty_points=missing_evidence_penalty,
+                    reason=" | ".join(missing_evidence_reasons),
+                    severity="warning"
+                )
+            )
+            reasoning.append(f"Evidence Missing: {len(missing_evidence_reasons)} critical fields were not found in the uploaded document.")            
         # Pros
         if product.liquidity_rating == "high" and product.lock_in_months == 0:
             pros.append("100% instant liquidity with zero premature breakage penalties.")
