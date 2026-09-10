@@ -14,7 +14,7 @@ services:
         generateValue: true
       - key: FRONTEND_ORIGIN
         value: "https://alignfin.netlify.app"
-  - type: psql
+  - type: pg
     name: alignfin-postgres
     plan: free
     databaseName: alignfin
