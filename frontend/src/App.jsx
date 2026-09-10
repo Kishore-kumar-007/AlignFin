@@ -4,6 +4,7 @@ import Header from './components/Header';
 import ProfileWizard from './components/ProfileWizard';
 import SuitabilityCard from './components/SuitabilityCard';
 import ComparisonView from './components/ComparisonView';
+import DocumentScanner from "./components/DocumentScanner";
 import ExplainabilityDrawer from './components/ExplainabilityDrawer';
 import CatalogExplorer from './components/CatalogExplorer';
 import { 
@@ -34,6 +35,7 @@ export default function App() {
   
   // User Profile State
   const [profile, setProfile] = useState(null);
+  const [userEmail, setUserEmail] = useState("");
 
   const [riskAnalysis, setRiskAnalysis] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
@@ -78,6 +80,7 @@ export default function App() {
         }
 
         setProfile(userData.profile);
+        setUserEmail(userData.email);
 
         const [personasData, productsData] = await Promise.all([
           fetchPersonas(),
@@ -193,6 +196,8 @@ export default function App() {
         categoryInterest={profile.category_interest}
         onSelectCategory={handleSelectCategory}
         onOpenCatalog={() => setIsCatalogOpen(true)}
+        profile={profile}
+        email={userEmail}
       />
 
       {/* Main Container */}
@@ -251,6 +256,9 @@ export default function App() {
               />
             ))}
           </div>
+        </section>
+        <section className="mt-8">
+          <DocumentScanner />
         </section>
       </main>
 

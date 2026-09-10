@@ -82,7 +82,7 @@ export default function OnboardingPage() {
             <div>
               <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-2">Monthly Income (₹)</label>
               <input
-                type="number" required min="0" step="1000"
+                type="number" required min="0" step="1"
                 value={profile.monthly_income}
                 onChange={(e) => handleChange('monthly_income', Number(e.target.value))}
                 className="w-full bg-slate-950 border border-slate-800 rounded-xl py-2 px-4 text-white focus:outline-none focus:border-emerald-500"
@@ -91,7 +91,7 @@ export default function OnboardingPage() {
             <div>
               <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-2">Monthly Expenses (₹)</label>
               <input
-                type="number" required min="0" step="1000"
+                type="number" required min="0" step="1"
                 value={profile.monthly_expenses}
                 onChange={(e) => handleChange('monthly_expenses', Number(e.target.value))}
                 className="w-full bg-slate-950 border border-slate-800 rounded-xl py-2 px-4 text-white focus:outline-none focus:border-emerald-500"
@@ -101,7 +101,7 @@ export default function OnboardingPage() {
             <div>
               <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-2">Liquid Savings (₹)</label>
               <input
-                type="number" required min="0" step="1000"
+                type="number" required min="0" step="1"
                 value={profile.current_savings}
                 onChange={(e) => handleChange('current_savings', Number(e.target.value))}
                 className="w-full bg-slate-950 border border-slate-800 rounded-xl py-2 px-4 text-white focus:outline-none focus:border-emerald-500"
@@ -110,7 +110,7 @@ export default function OnboardingPage() {
             <div>
               <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-2">Existing EMI (₹)</label>
               <input
-                type="number" required min="0" step="1000"
+                type="number" required min="0" step="1"
                 value={profile.existing_debt_emi}
                 onChange={(e) => handleChange('existing_debt_emi', Number(e.target.value))}
                 className="w-full bg-slate-950 border border-slate-800 rounded-xl py-2 px-4 text-white focus:outline-none focus:border-emerald-500"

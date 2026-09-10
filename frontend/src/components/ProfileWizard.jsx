@@ -120,7 +120,7 @@ export default function ProfileWizard({ profile, onChangeProfile, riskAnalysis, 
             type="range"
             min="10000"
             max="250000"
-            step="2500"
+            step="1"
             value={profile.monthly_income}
             onChange={(e) => handleChange('monthly_income', Number(e.target.value))}
             className="w-full accent-emerald-500 cursor-pointer h-1.5 bg-slate-700 rounded-lg"
@@ -141,7 +141,7 @@ export default function ProfileWizard({ profile, onChangeProfile, riskAnalysis, 
             type="range"
             min="5000"
             max="180000"
-            step="1000"
+            step="1"
             value={profile.monthly_expenses}
             onChange={(e) => handleChange('monthly_expenses', Number(e.target.value))}
             className="w-full accent-amber-500 cursor-pointer h-1.5 bg-slate-700 rounded-lg"
@@ -162,7 +162,7 @@ export default function ProfileWizard({ profile, onChangeProfile, riskAnalysis, 
             type="range"
             min="0"
             max="80000"
-            step="1000"
+            step="1"
             value={profile.existing_debt_emi}
             onChange={(e) => handleChange('existing_debt_emi', Number(e.target.value))}
             className="w-full accent-rose-500 cursor-pointer h-1.5 bg-slate-700 rounded-lg"
@@ -183,7 +183,7 @@ export default function ProfileWizard({ profile, onChangeProfile, riskAnalysis, 
             type="range"
             min="0"
             max="1000000"
-            step="5000"
+            step="1"
             value={profile.current_savings}
             onChange={(e) => handleChange('current_savings', Number(e.target.value))}
             className="w-full accent-cyan-500 cursor-pointer h-1.5 bg-slate-700 rounded-lg"
@@ -207,7 +207,7 @@ export default function ProfileWizard({ profile, onChangeProfile, riskAnalysis, 
             type="range"
             min="10000"
             max="1500000"
-            step="10000"
+            step="1"
             value={profile.target_amount}
             onChange={(e) => handleChange('target_amount', Number(e.target.value))}
             className="w-full accent-emerald-500 cursor-pointer h-1.5 bg-slate-700 rounded-lg"
@@ -230,7 +230,7 @@ export default function ProfileWizard({ profile, onChangeProfile, riskAnalysis, 
             type="range"
             min="6"
             max="84"
-            step="6"
+            step="1"
             value={profile.target_horizon_months}
             onChange={(e) => handleChange('target_horizon_months', Number(e.target.value))}
             className="w-full accent-emerald-500 cursor-pointer h-1.5 bg-slate-700 rounded-lg"
