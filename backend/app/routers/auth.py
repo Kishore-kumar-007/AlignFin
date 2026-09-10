@@ -12,7 +12,14 @@ from ..database.sqlalchemy_models import UserModel
 from ..models.auth import UserRegister, UserLogin, Token, UserResponse
 from ..models.user import UserProfile
 
-SECRET_KEY = os.environ.get("JWT_SECRET", "super-secret-key-change-in-production")
+SECRET_KEY = os.environ.get("JWT_SECRET")
+# In production, require a secure JWT secret
+if os.environ.get("RENDER") or os.environ.get("ENVIRONMENT") == "production":
+    if not SECRET_KEY:
+        raise ValueError("JWT_SECRET environment variable is required in production.")
+else:
+    # Fallback only for local development
+    SECRET_KEY = SECRET_KEY or "super-secret-key-change-in-production"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7 # 7 days
 

@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: alignfin-backend
+    env: python
+    buildCommand: "cd backend && pip install -r requirements.txt"
+    startCommand: "cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+    healthCheckPath: "/api/health"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: alignfin-postgres
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: FRONTEND_ORIGIN
+        value: "https://alignfin.netlify.app"
+  - type: psql
+    name: alignfin-postgres
+    plan: free
+    databaseName: alignfin
+    user: alignfin_user

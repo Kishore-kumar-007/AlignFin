@@ -17,10 +17,15 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# Enable CORS for local React/Vite development and multi-device access
+import os
+
+# Configure CORS for local development and production
+frontend_origin = os.environ.get("FRONTEND_ORIGIN", "http://localhost:5173,http://127.0.0.1:5173")
+origins = [origin.strip() for origin in frontend_origin.split(",")]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
