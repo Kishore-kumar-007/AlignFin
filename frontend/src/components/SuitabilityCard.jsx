@@ -122,7 +122,7 @@ export default function SuitabilityCard({
                   <span className="text-xs font-bold text-emerald-400 uppercase">{prod.liquidity_rating}</span>
                 </div>
                 <div>
-                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Premature Penalty</span>
+                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Penalty for withdrawing early</span>
                   <span className={`text-xs font-bold ${prod.prepayment_penalty_pct > 0 ? 'text-amber-400' : 'text-emerald-400'}`}>
                     {prod.prepayment_penalty_pct}%
                   </span>

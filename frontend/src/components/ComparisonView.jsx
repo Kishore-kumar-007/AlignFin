@@ -76,7 +76,7 @@ export default function ComparisonView({ matrix, onClose, onOpenExplain }) {
         </div>
 
         {/* AI Decision Intelligence Verdict Banner */}
-        <div className="bg-gradient-to-r from-emerald-950/50 via-slate-900 to-slate-900 border border-emerald-500/40 rounded-xl p-4.5 space-y-2">
+        <div className="bg-blue-600 from-emerald-950/50 via-slate-900 to-slate-900 border border-emerald-500/40 rounded-xl p-4.5 space-y-2">
           <div className="flex items-center gap-2">
             <Zap className="h-4 w-4 text-emerald-400" />
             <span className="text-xs uppercase font-extrabold tracking-wider text-emerald-400">
@@ -248,7 +248,7 @@ export default function ComparisonView({ matrix, onClose, onOpenExplain }) {
               {category === 'savings' && (
                 <>
                   <tr>
-                    <td className="p-3 font-semibold text-slate-400">Liquidity Rating</td>
+                    <td className="p-3 font-semibold text-slate-400">How easily you can access your money</td>
                     {results.map((r) => (
                       <td key={r.product.id} className={`p-3 font-bold uppercase ${r.product.liquidity_rating === 'high' ? 'text-emerald-400' : r.product.liquidity_rating === 'medium' ? 'text-amber-400' : 'text-rose-400'}`}>
                         {r.product.liquidity_rating}

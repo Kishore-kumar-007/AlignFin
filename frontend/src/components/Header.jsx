@@ -20,7 +20,7 @@ export default function Header({
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-200 to-emerald-400 bg-clip-text text-transparent">
+              <span className="text-xl font-extrabold tracking-tight bg-blue-600 from-white via-slate-200 to-emerald-400 bg-clip-text text-transparent">
                 AlignFin
               </span>
               <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-emerald-950/80 text-emerald-400 border border-emerald-800/60">
