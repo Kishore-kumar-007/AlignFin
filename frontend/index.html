@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AlignFin — Explainable Financial Product Suitability Intelligence Engine</title>
   <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 <body class="min-h-screen bg-[#0b0f19] text-gray-100 antialiased selection:bg-blue-600 selection:text-white">
 
@@ -698,6 +698,21 @@
     </div>
   </div>
 
-  <script src="app.js"></script>
+  <!-- Data Modules -->
+  <script src="js/data/scenarios.js"></script>
+  <script src="js/data/documentsData.js"></script>
+
+  <!-- Utilities & Engines -->
+  <script src="js/utils/formatters.js"></script>
+  <script src="js/engines/fbsi.js"></script>
+
+  <!-- Component Modules -->
+  <script src="js/components/leaderboard.js"></script>
+  <script src="js/components/explainModal.js"></script>
+  <script src="js/components/compareModal.js"></script>
+  <script src="js/components/documentAuditor.js"></script>
+
+  <!-- Main Orchestrator -->
+  <script src="js/app.js"></script>
 </body>
 </html>
