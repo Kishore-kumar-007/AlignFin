@@ -30,7 +30,9 @@ class Product(BaseModel):
     # Qualitative insights & terms
     key_features: List[str] = Field(default_factory=list)
     secondary_conditions: List[str] = Field(default_factory=list)
-    badge: Optional[str] = None # e.g. "Headline Bait", "Flexi Choice", "Safe Anchor"
+    badge: Optional[str] = None
+    source: Optional[str] = "Provider product document"
+    last_updated: Optional[str] = "Not specified" # e.g. "Headline Bait", "Flexi Choice", "Safe Anchor"
     
     # Evidence Tracking (Document Intelligence)
     evidence_map: Dict[str, EvidenceItem] = Field(default_factory=dict, description="Maps field names to their extraction evidence")

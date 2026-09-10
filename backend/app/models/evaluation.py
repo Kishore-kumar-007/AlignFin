@@ -46,6 +46,12 @@ class SuitabilityResult(BaseModel):
     penalties: List[PenaltyItem]
     pros: List[str]
     cons: List[str]
+    match_strength: str = "Moderate match"
+    is_recommended: bool = True
+    scenarios: Dict[str, str] = Field(default_factory=dict)
+    inflation_adjusted_base: Optional[str] = None
+    tax_outcome: str = "Tax not estimated"
+    assumptions: List[str] = Field(default_factory=list)
     secondary_cost_impact: Dict[str, Any]
     cash_flow_simulation: List[CashFlowPoint]
     reasoning_trace: List[str]

@@ -63,14 +63,31 @@ export default function SuitabilityCard({
         </div>
       )}
 
+
+      {/* Not Recommended Banner */}
+      {!result.is_recommended && (
+        <div className="bg-red-50 border border-red-200 text-red-800 p-3 mb-3 rounded-lg flex items-start gap-3">
+          <AlertTriangle className="h-5 w-5 shrink-0 mt-0.5 text-red-600" />
+          <div>
+            <h4 className="font-bold text-sm uppercase">Not Recommended</h4>
+            <p className="text-sm mt-1">This product significantly conflicts with your stated financial goal or risk capacity. Consider products with terms more aligned to your situation.</p>
+          </div>
+        </div>
+      )}
+
       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+
         {/* Left Info */}
         <div className="space-y-1.5 flex-1 pr-4">
+
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-sm font-mono font-bold text-gray-600">#{result.rank}</span>
             <span className="text-sm font-semibold text-gray-600">{prod.provider}</span>
+            <span className="text-sm text-gray-500">| Source: {prod.source || 'Provider product document'}</span>
+            <span className="text-xs text-gray-400">({prod.last_updated || 'Not specified'})</span>
             {getTierBadge(result.fit_tier)}
           </div>
+
 
           <h3 className="text-base font-bold text-gray-900 tracking-tight flex items-center gap-2">
             {prod.name}
@@ -176,7 +193,50 @@ export default function SuitabilityCard({
         ))}
       </div>
 
+
+      {/* Scenarios & Explanations */}
+      {result.scenarios && Object.keys(result.scenarios).length > 0 && (
+        <div className="mt-4 p-4 bg-gray-50 border border-gray-200 rounded-lg">
+          <h4 className="text-sm font-bold text-gray-900 mb-2">Illustrative Scenarios</h4>
+          <p className="text-xs text-gray-500 mb-3">Illustrative scenario based on the assumptions shown. Not guaranteed.</p>
+          
+          <div className="grid grid-cols-3 gap-2 mb-3">
+            {Object.entries(result.scenarios).map(([key, val]) => (
+              <div key={key} className="bg-white p-2 border border-gray-200 rounded text-center">
+                <div className="text-xs text-gray-500 font-semibold">{key}</div>
+                <div className="text-sm font-bold text-gray-900">{val}</div>
+              </div>
+            ))}
+          </div>
+          
+          <div className="flex flex-col gap-1 mt-2">
+            {result.inflation_adjusted_base && (
+              <div className="text-xs font-semibold text-gray-700 flex justify-between">
+                <span>Estimated purchasing power (inflation-adjusted):</span>
+                <span className="text-indigo-600">{result.inflation_adjusted_base}</span>
+              </div>
+            )}
+            {result.tax_outcome && (
+              <div className="text-xs font-semibold text-gray-700 flex justify-between mt-1">
+                <span>Tax impact:</span>
+                <span className="text-gray-900">{result.tax_outcome}</span>
+              </div>
+            )}
+            
+            {result.assumptions && result.assumptions.length > 0 && (
+              <details className="mt-3">
+                <summary className="text-xs font-bold text-indigo-600 cursor-pointer">View Assumptions</summary>
+                <ul className="list-disc pl-4 mt-2 text-xs text-gray-600 space-y-1">
+                  {result.assumptions.map((a, i) => <li key={i}>{a}</li>)}
+                </ul>
+              </details>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Action Footer */}
+
       <div className="flex items-center justify-between pt-2 border-t border-gray-200/60">
         <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 cursor-pointer select-none">
           <input
