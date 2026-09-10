@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from './components/Header';
+import WelcomeHero from "./components/WelcomeHero";
 import ProfileWizard from './components/ProfileWizard';
 import SuitabilityCard from './components/SuitabilityCard';
 import ComparisonView from './components/ComparisonView';
@@ -180,14 +181,14 @@ export default function App() {
 
   if (isLoading || !profile) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-emerald-500 font-bold animate-pulse text-lg">Loading Profile...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between selection:bg-emerald-500 selection:text-white">
+    <div className="min-h-screen bg-gray-50 text-gray-900 flex flex-col justify-between selection:bg-indigo-600 text-white selection:text-gray-900">
       {/* Top Header & Persona Nav */}
       <Header
         personas={personas}
@@ -203,10 +204,11 @@ export default function App() {
       {/* Main Container */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8 flex-1 w-full">
         
+        <WelcomeHero userName={profile.name} />
         <div className="flex justify-end">
           <button 
             onClick={handleLogout}
-            className="text-xs font-bold text-rose-400 hover:text-rose-300 bg-rose-500/10 hover:bg-rose-500/20 px-4 py-2 rounded-lg transition"
+            className="text-sm font-bold text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-50 px-4 py-2 rounded-lg transition"
           >
             Sign Out
           </button>
@@ -224,19 +226,19 @@ export default function App() {
 
         {/* 2. Intelligent Leaderboard */}
         <section className="space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-slate-800">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-gray-200">
             <div>
-              <h2 className="text-2xl font-black text-white flex items-center gap-2">
-                <Sparkles className="h-6 w-6 text-emerald-400" />
+              <h2 className="text-2xl font-black text-gray-900 flex items-center gap-2">
+                <Sparkles className="h-6 w-6 text-indigo-600" />
                 Suitability Leaderboard
               </h2>
-              <p className="text-sm text-slate-400 mt-0.5">Ranked explicitly for {profile.name}'s constraints.</p>
+              <p className="text-sm text-gray-600 mt-0.5">Ranked explicitly for {profile.name}'s constraints.</p>
             </div>
             
             {selectedForCompare.length >= 2 && (
               <button
                 onClick={handleRunComparison}
-                className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black px-5 py-2.5 rounded-xl transition flex items-center gap-2 shadow-lg shadow-emerald-500/20 animate-in fade-in zoom-in duration-300"
+                className="bg-indigo-600 text-white hover:bg-indigo-700 text-white font-black px-5 py-2.5 rounded-xl transition flex items-center gap-2 shadow-sm animate-in fade-in zoom-in duration-300"
               >
                 <Scale className="h-5 w-5" />
                 Compare Selected ({selectedForCompare.length})

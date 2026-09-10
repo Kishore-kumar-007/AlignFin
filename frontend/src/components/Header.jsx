@@ -13,24 +13,24 @@ export default function Header({
   email
 }) {
   return (
-    <header className="border-b border-slate-800 bg-slate-900/90 backdrop-blur-md sticky top-0 z-40">
+    <header className="border-b border-gray-200 bg-white/90 backdrop-blur-md sticky top-0 z-40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         
         {/* Brand & Tagline */}
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center shadow-lg shadow-emerald-500/20">
-            <ShieldCheck className="h-6 w-6 text-slate-950 stroke-[2.5]" />
+          <div className="h-10 w-10 rounded-xl bg-indigo-600  flex items-center justify-center shadow-sm">
+            <ShieldCheck className="h-6 w-6 text-white stroke-[2.5]" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-xl font-extrabold tracking-tight bg-blue-600 from-white via-slate-200 to-emerald-400 bg-clip-text text-transparent">
+              <span className="text-xl font-extrabold tracking-tight bg-blue-600 text-indigo-800">
                 AlignFin
               </span>
-              <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-emerald-950/80 text-emerald-400 border border-emerald-800/60">
+              <span className="text-sm uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-emerald-950/80 text-indigo-600 border border-emerald-800/60">
                 Decision Intelligence
               </span>
             </div>
-            <p className="text-xs text-slate-400 font-medium hidden sm:block">
+            <p className="text-sm text-gray-600 font-medium hidden sm:block">
               "Eligibility tells you what you can get. AlignFin tells you what fits."
             </p>
           </div>
@@ -42,13 +42,13 @@ export default function Header({
           <ProfileViewer profile={profile} email={email} />
 
           {/* 1-Click Demo Persona Switcher */}
-          <div className="flex items-center gap-2 bg-slate-800/80 border border-slate-700/70 rounded-xl p-1.5 px-3 shadow-inner">
-            <UserCheck className="h-4 w-4 text-emerald-400 shrink-0" />
-            <span className="text-xs text-slate-300 font-semibold shrink-0">Demo Persona:</span>
+          <div className="flex items-center gap-2 bg-gray-100 border border-gray-200 rounded-xl p-1.5 px-3 shadow-inner">
+            <UserCheck className="h-4 w-4 text-indigo-600 shrink-0" />
+            <span className="text-sm text-gray-700 font-semibold shrink-0">Demo Persona:</span>
             <select
               value={selectedPersonaId || ''}
               onChange={(e) => onSelectPersona(e.target.value)}
-              className="bg-slate-900 text-xs font-medium text-emerald-300 rounded-lg border border-slate-700 px-2 py-1 focus:outline-none focus:ring-1 focus:ring-emerald-500 cursor-pointer max-w-[150px] truncate"
+              className="bg-white text-sm font-medium text-indigo-700 rounded-lg border border-gray-200 px-2 py-1 focus:outline-none focus:ring-1 focus:ring-emerald-500 cursor-pointer max-w-[150px] truncate"
             >
               <option value="" disabled>Select Preset...</option>
               {personas.map((p) => (
@@ -62,18 +62,18 @@ export default function Header({
           {/* Product Catalog Button */}
           <button
             onClick={onOpenCatalog}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm font-semibold bg-gray-100 hover:bg-gray-200 text-gray-700 border border-gray-200 transition"
           >
-            <BookOpen className="h-3.5 w-3.5 text-slate-400" />
+            <BookOpen className="h-3.5 w-3.5 text-gray-600" />
             <span>Catalog</span>
           </button>
         </div>
       </div>
 
       {/* Category Tabs */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-1 pb-2.5 flex items-center justify-between border-t border-slate-800/50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-1 pb-2.5 flex items-center justify-between border-t border-gray-200">
         <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold text-slate-400 mr-1 hidden sm:inline">Category:</span>
+          <span className="text-sm font-semibold text-gray-600 mr-1 hidden sm:inline">Category:</span>
           {[
             { id: 'loan', label: 'Personal Loans & Credit', icon: Zap },
             { id: 'investment', label: 'Wealth & Investments', icon: Sparkles },
@@ -85,21 +85,21 @@ export default function Header({
               <button
                 key={cat.id}
                 onClick={() => onSelectCategory(cat.id)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-bold transition ${
                   active
-                    ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/40 shadow-sm'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                    ? 'bg-indigo-50 text-indigo-600 border border-indigo-200 shadow-sm'
+                    : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50'
                 }`}
               >
-                <Icon className={`h-3.5 w-3.5 ${active ? 'text-emerald-400' : 'text-slate-400'}`} />
+                <Icon className={`h-3.5 w-3.5 ${active ? 'text-indigo-600' : 'text-gray-600'}`} />
                 <span>{cat.label}</span>
               </button>
             );
           })}
         </div>
 
-        <div className="text-[11px] text-slate-400 font-mono hidden md:flex items-center gap-1.5">
-          <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+        <div className="text-sm text-gray-600 font-mono hidden md:flex items-center gap-1.5">
+          <span className="h-2 w-2 rounded-full bg-indigo-600 text-white animate-pulse" />
           <span>AlignFin Intelligence Active</span>
         </div>
       </div>

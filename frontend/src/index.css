@@ -2,42 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer utilities {
-  .glass-panel {
-    background: #1e293b;
-    border: 1px solid #334155;
-    border-radius: 12px;
-  }
-  
-  .glass-card {
-    background: #0f172a;
-    border: 1px solid #1e293b;
-    border-radius: 12px;
-  }
-
-  .glow-emerald {
-    box-shadow: none;
-  }
-  .glow-amber {
-    box-shadow: none;
-  }
-  .glow-rose {
-    box-shadow: none;
-  }
-}
-
 /* Custom Scrollbars */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #0f172a;
+  background: #f8fafc;
 }
 ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: #cbd5e1;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #475569;
+  background: #94a3b8;
 }
