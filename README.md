@@ -5,7 +5,7 @@
 [![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688.svg)](https://fastapi.tiangolo.com)
 [![React](https://img.shields.io/badge/Frontend-React%20%2B%20Vite%20%2B%20Tailwind-61DAFB.svg)](https://vitejs.dev)
 [![Python](https://img.shields.io/badge/Python-3.14%20%2F%203.11-3776AB.svg)](https://python.org)
-[![Tests](https://img.shields.io/badge/Tests-10%20Passed-success.svg)]()
+[![Tests](https://img.shields.io/badge/Tests-9%20Passed-success.svg)]()
 [![Event](https://img.shields.io/badge/Hackathon-HACKNOVA'26%20(24H)-orange.svg)]()
 
 AlignFin is a decision-support and financial-literacy intelligence platform designed for **HACKNOVA’26 (Domain: Finance & Fintech, Problem Statement: PS-08)**.
@@ -60,7 +60,7 @@ python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 
-# Run backend test suite (10 automated unit & scenario tests)
+# Run backend test suite (9 automated unit & scenario tests)
 PYTHONPATH=. pytest tests/ -v
 
 # Start FastAPI server on port 8000
@@ -84,12 +84,12 @@ Open **`http://localhost:5173`** in your browser.
 AlignFin/
 ├── backend/
 │   ├── app/
-│   │   ├── database/       # SQLite db and 30-product seed catalog
+│   │   ├── database/       # PostgreSQL DB and 30-product seed catalog
 │   │   ├── engine/         # Deterministic FBSI & Category Evaluators
 │   │   ├── models/         # Pydantic Schemas (UserProfile, Product, Results)
 │   │   ├── routers/        # FastAPI Endpoints (/personas, /products, /evaluate)
 │   │   └── main.py         # Main FastAPI entry point with CORS
-│   ├── tests/              # 10 comprehensive pytest scenario test cases
+│   ├── tests/              # 9 comprehensive pytest scenario test cases
 │   └── requirements.txt
 ├── frontend/
 │   ├── src/
@@ -101,7 +101,8 @@ AlignFin/
 │   └── vite.config.js
 ├── docs/
 │   ├── architecture.md     # Mathematical formulation and architecture diagrams
-│   └── judge-qa.md         # Defensible answers for hackathon judges
+    ├── demo-script.md      # Live demo scenarios and talking points
+    └── limitations.md      # Known limitations and technical boundaries
 └── README.md
 ```
 
@@ -110,6 +111,6 @@ AlignFin/
 ## 🏆 Hackathon Defense Highlights
 
 * **100% Deterministic Core**: No black-box random rankings or LLM hallucinations for scores.
-* **Separation of Concerns**: Product catalog decoupled in SQLite; easily swap prototype data with live open-banking feeds.
+* **Separation of Concerns**: Product catalog decoupled in PostgreSQL; easily swap prototype data with live open-banking feeds.
 * **Inspectable Explainability**: Every single score deduction is displayed with exact formulas and weights.
 * **Multi-Device Ready**: Designed for cross-laptop/mobile testing during hackathon presentations.

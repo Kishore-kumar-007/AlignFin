@@ -21,7 +21,7 @@ AlignFin is an **Explainable Financial Product Suitability Intelligence Engine**
             ▼                                     ▼
 ┌───────────────────────────────┐   ┌─────────────────────────┐
 │     Risk Capacity Engine      │   │ Curated Product Catalog │
-│   (Financial Buffer Index)    │   │      (SQLite DB)        │
+│   (Financial Buffer Index)    │   │      (PostgreSQL DB)        │
 │  - Monthly Surplus Ratio      │   │  - 12 Loans             │
 │  - Emergency Runway (Months)  │   │  - 10 Investments       │
 │  - Debt-to-Income (DTI)       │   │  - 8 Savings / FDs      │
