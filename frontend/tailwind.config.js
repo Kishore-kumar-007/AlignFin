@@ -15,14 +15,17 @@ export default {
           700: '#047857',
           900: '#064e3b',
         },
-        fintech: {
-          navy: '#0f172a',
-          slate: '#1e293b',
-          card: '#1e293b',
-          border: '#334155',
-          accent: '#38bdf8',
-          gold: '#f59e0b',
-          crimson: '#ef4444'
+                fintech: {
+          bg: '#F7F5F0',
+          card: '#FFFFFF',
+          primary: '#18221F',
+          secondary: '#66716D',
+          accent: '#176B5B',
+          accent2: '#C7A96B',
+          border: '#E2E0D9',
+          success: '#2F7D5C',
+          warning: '#B47A35',
+          danger: '#B94A48'
         }
       }
     },

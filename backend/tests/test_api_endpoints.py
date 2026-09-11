@@ -82,3 +82,21 @@ def test_api_compare():
     assert len(matrix["results"]) == 2
     assert matrix["results"][0]["product"]["id"] == "loan-flexi-fit"
     assert len(matrix["key_tradeoffs"]) > 0
+
+def test_auth_registration_valid():
+    res = client.post("/api/auth/register", json={"email": "test@example.com", "password": "validpassword"})
+    # Since DB is shared during tests and resets might not happen, we might get 400 Email already registered, 
+    # but as long as it's not the short password error it's fine.
+    assert res.status_code in [200, 400]
+    if res.status_code == 400:
+        assert res.json()["detail"] == "Email already registered"
+
+def test_auth_registration_short_password():
+    res = client.post("/api/auth/register", json={"email": "short@example.com", "password": "short"})
+    assert res.status_code == 400
+    assert res.json()["detail"] == "Password must be at least 6 characters."
+
+def test_auth_registration_empty_password():
+    res = client.post("/api/auth/register", json={"email": "empty@example.com", "password": ""})
+    assert res.status_code == 400
+    assert res.json()["detail"] == "Password must be at least 6 characters."

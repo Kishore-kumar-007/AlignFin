@@ -68,6 +68,9 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = De
 
 @router.post("/register", response_model=Token)
 def register(user_data: UserRegister, db: Session = Depends(get_db)):
+    if not user_data.password or len(user_data.password) < 6:
+        raise HTTPException(status_code=400, detail="Password must be at least 6 characters.")
+        
     existing = db.query(UserModel).filter(UserModel.email == user_data.email).first()
     if existing:
         raise HTTPException(status_code=400, detail="Email already registered")

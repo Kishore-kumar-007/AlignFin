@@ -43,16 +43,3 @@ class UserModel(Base):
     hashed_password = Column(String, nullable=False)
     profile_json = Column(JSON, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
-
-class EvaluationModel(Base):
-    __tablename__ = "evaluations"
-    
-    id = Column(String, primary_key=True)
-    user_id = Column(String, nullable=False)
-    product_id = Column(String, nullable=False)
-    suitability_score = Column(Float, nullable=False)
-    category = Column(String, nullable=False)
-    risk_capacity = Column(String, nullable=False)
-    breakdown_json = Column(JSON, nullable=False)
-    penalties_json = Column(JSON, nullable=False)
-    created_at = Column(DateTime(timezone=True), server_default=func.now())

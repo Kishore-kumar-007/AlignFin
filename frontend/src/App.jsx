@@ -9,7 +9,6 @@ import DocumentScanner from "./components/DocumentScanner";
 import ExplainabilityDrawer from './components/ExplainabilityDrawer';
 import CatalogExplorer from './components/CatalogExplorer';
 import { 
-  fetchPersonas, 
   fetchProducts, 
   analyzeRisk, 
   fetchRecommendations, 
@@ -30,8 +29,6 @@ import {
 
 export default function App() {
   const navigate = useNavigate();
-  const [personas, setPersonas] = useState([]);
-  const [selectedPersonaId, setSelectedPersonaId] = useState('');
   const [productsCatalog, setProductsCatalog] = useState([]);
   
   // User Profile State
@@ -46,6 +43,7 @@ export default function App() {
   const [inspectResult, setInspectResult] = useState(null);
   const [isCatalogOpen, setIsCatalogOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isEvaluating, setIsEvaluating] = useState(false);
   
   // Logout handler
   const handleLogout = () => {
@@ -83,11 +81,7 @@ export default function App() {
         setProfile(userData.profile);
         setUserEmail(userData.email);
 
-        const [personasData, productsData] = await Promise.all([
-          fetchPersonas(),
-          fetchProducts()
-        ]);
-        setPersonas(personasData);
+        const productsData = await fetchProducts();
         setProductsCatalog(productsData);
       } catch (err) {
         console.error('Initialization error:', err);
@@ -100,7 +94,7 @@ export default function App() {
 
   // Recalculate Risk and Recommendations on profile or category change
   const evaluateProfile = useCallback(async (currentProfile) => {
-    setIsLoading(true);
+    setIsEvaluating(true);
     try {
       const [riskRes, recsRes] = await Promise.all([
         analyzeRisk(currentProfile),
@@ -118,7 +112,7 @@ export default function App() {
     } catch (err) {
       console.error('Evaluation error:', err);
     } finally {
-      setIsLoading(false);
+      setIsEvaluating(false);
     }
   }, []);
 
@@ -129,18 +123,6 @@ export default function App() {
     }, 500);
     return () => clearTimeout(handler);
   }, [profile, evaluateProfile]);
-
-  // Persona switch handler
-  const handleSelectPersona = (personaId) => {
-    const found = personas.find(p => p.id === personaId);
-    if (found) {
-      setSelectedPersonaId(personaId);
-      setProfile({
-        ...found.profile,
-        name: found.profile.name || found.name
-      });
-    }
-  };
 
   // Category switch handler
   const handleSelectCategory = (catId) => {
@@ -175,25 +157,22 @@ export default function App() {
     } catch (err) {
       console.error('Compare error:', err);
     } finally {
-      setIsLoading(false);
+      setIsEvaluating(false);
     }
   };
 
   if (isLoading || !profile) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-emerald-500 font-bold animate-pulse text-lg">Loading Profile...</div>
+      <div className="min-h-screen bg-fintech-bg flex items-center justify-center">
+        <div className="text-fintech-accent font-bold animate-pulse text-lg">Loading Profile...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900 flex flex-col justify-between selection:bg-indigo-600 text-white selection:text-gray-900">
+    <div className="min-h-screen bg-fintech-bg text-fintech-primary flex flex-col justify-between selection:bg-fintech-accent2 text-white selection:text-fintech-primary">
       {/* Top Header & Persona Nav */}
       <Header
-        personas={personas}
-        selectedPersonaId={selectedPersonaId}
-        onSelectPersona={handleSelectPersona}
         categoryInterest={profile.category_interest}
         onSelectCategory={handleSelectCategory}
         onOpenCatalog={() => setIsCatalogOpen(true)}
@@ -220,25 +199,25 @@ export default function App() {
             profile={profile}
             onChangeProfile={setProfile}
             onTriggerEvaluate={() => evaluateProfile(profile)}
-            isEvaluating={isLoading}
+            isEvaluating={isEvaluating}
           />
         </section>
 
         {/* 2. Intelligent Leaderboard */}
         <section className="space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-gray-200">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-fintech-border">
             <div>
-              <h2 className="text-2xl font-black text-gray-900 flex items-center gap-2">
-                <Sparkles className="h-6 w-6 text-indigo-600" />
+              <h2 className="text-2xl font-black text-fintech-primary flex items-center gap-2">
+                <Sparkles className="h-6 w-6 text-fintech-accent" />
                 Suitability Leaderboard
               </h2>
-              <p className="text-sm text-gray-600 mt-0.5">Ranked explicitly for {profile.name}'s constraints.</p>
+              <p className="text-sm text-fintech-secondary mt-0.5">Ranked explicitly for {profile.name}'s constraints.</p>
             </div>
             
             {selectedForCompare.length >= 2 && (
               <button
                 onClick={handleRunComparison}
-                className="bg-indigo-600 text-white hover:bg-indigo-700 text-white font-black px-5 py-2.5 rounded-xl transition flex items-center gap-2 shadow-sm animate-in fade-in zoom-in duration-300"
+                className="fintech-button bg-fintech-accent font-black px-5 py-2.5 rounded-xl transition flex items-center gap-2 shadow-sm animate-in fade-in zoom-in duration-300"
               >
                 <Scale className="h-5 w-5" />
                 Compare Selected ({selectedForCompare.length})
@@ -247,7 +226,7 @@ export default function App() {
           </div>
 
           {/* Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className={`grid grid-cols-1 md:grid-cols-2 gap-4 transition-opacity duration-200 ${isEvaluating ? "opacity-50 pointer-events-none" : "opacity-100"}`}>
             {recommendations.map((result) => (
               <SuitabilityCard
                 key={result.product.id}

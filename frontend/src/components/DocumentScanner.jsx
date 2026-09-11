@@ -54,10 +54,10 @@ export default function DocumentScanner({ onProductExtracted }) {
   };
 
   const getFileIcon = () => {
-    if (!file) return <FileText className="w-12 h-12 text-gray-600 mb-4" />;
+    if (!file) return <FileText className="w-12 h-12 text-fintech-secondary mb-4" />;
     const type = file.type || '';
-    if (type.includes('image')) return <FileImage className="w-12 h-12 text-indigo-600 mb-4" />;
-    return <FileText className="w-12 h-12 text-blue-700 mb-4" />;
+    if (type.includes('image')) return <FileImage className="w-12 h-12 text-fintech-accent mb-4" />;
+    return <FileText className="w-12 h-12 text-fintech-accent mb-4" />;
   };
 
   const formatFileSize = (bytes) => {
@@ -71,12 +71,12 @@ export default function DocumentScanner({ onProductExtracted }) {
   return (
     <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-6 w-full max-w-4xl mx-auto space-y-6">
       <div className="flex items-center gap-3 border-b border-gray-200 pb-4">
-        <div className="p-2 bg-blue-50 rounded-lg">
-          <UploadCloud className="w-6 h-6 text-blue-700" />
+        <div className="p-2 bg-fintech-bg rounded-lg">
+          <UploadCloud className="w-6 h-6 text-fintech-accent" />
         </div>
         <div>
-          <h2 className="text-xl font-bold text-gray-900">Analyze a document</h2>
-          <p className="text-sm text-gray-600">Upload a financial document such as a policy, agreement or product brochure.</p>
+          <h2 className="text-xl font-bold text-fintech-primary">Analyze a document</h2>
+          <p className="text-sm text-fintech-secondary">Upload a PDF or TXT file to extract important terms, fees and penalties.</p>
         </div>
       </div>
 
@@ -91,78 +91,78 @@ export default function DocumentScanner({ onProductExtracted }) {
         >
           <div className="flex flex-col items-center justify-center">
             {getFileIcon()}
-            <p className="text-sm font-semibold text-gray-900 mb-2">Drag & Drop your financial document here</p>
-            <p className="text-sm text-gray-600 mb-4">Supports .pdf, .txt, .docx, .png, .jpg</p>
-            <label className="bg-blue-600 hover:bg-blue-500 cursor-pointer text-gray-900 px-5 py-2 rounded-lg font-semibold text-sm transition shadow-lg shadow-blue-500/20">
+            <p className="text-sm font-semibold text-fintech-primary mb-2">Drag & Drop your financial document here</p>
+            <p className="text-sm text-fintech-secondary mb-4">Supported formats: PDF and TXT</p>
+            <label className="fintech-button bg-fintech-accent cursor-pointer text-white px-5 py-2 rounded-lg font-semibold text-sm transition ">
               Upload Document
-              <input type="file" className="hidden" accept=".pdf,.txt,.doc,.docx,.png,.jpg,.jpeg,.webp" onChange={handleFileChange} />
+              <input type="file" className="hidden" accept=".pdf,.txt" onChange={handleFileChange} />
             </label>
           </div>
-          {error && <div className="mt-4 p-3 bg-red-50 text-red-700 text-sm rounded-lg border border-red-200">{error}</div>}
+          {error && <div className="mt-4 p-3 bg-red-50 text-fintech-danger text-sm rounded-lg border border-red-200">{error}</div>}
         </div>
       )}
 
       {isLoading && (
         <div className="border border-gray-200 bg-gray-50 rounded-xl p-10 text-center">
-          <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <h3 className="font-bold text-gray-900">Extracting Attributes...</h3>
-          <p className="text-sm text-gray-600">AlignFin Intelligence is reading {file?.name}</p>
+          <div className="w-12 h-12 border-4 border-fintech-accent border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <h3 className="font-bold text-fintech-primary">Extracting Attributes...</h3>
+          <p className="text-sm text-fintech-secondary">AlignFin Intelligence is reading {file?.name}</p>
         </div>
       )}
 
       {file && !isLoading && extractionResult && (
         <div className="space-y-6">
-          <div className="flex items-center justify-between bg-indigo-50 border border-indigo-200 p-4 rounded-xl">
+          <div className="flex items-center justify-between bg-fintech-bg border border-fintech-border p-4 rounded-xl">
             <div className="flex items-center gap-4">
               {getFileIcon()}
               <div>
-                <h3 className="font-bold text-indigo-600">{file.name}</h3>
-                <p className="text-sm text-gray-600">{formatFileSize(file.size)} • ✓ Document analyzed</p>
+                <h3 className="font-bold text-fintech-accent">{file.name}</h3>
+                <p className="text-sm text-fintech-secondary">{formatFileSize(file.size)} • ✓ Document analyzed</p>
               </div>
             </div>
-            <button onClick={reset} className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-900 rounded-lg text-sm font-semibold transition border border-gray-200">
+            <button onClick={reset} className="px-4 py-2 bg-white hover:bg-gray-50 border-fintech-border text-fintech-primary rounded-lg text-sm font-semibold transition border border-gray-200">
               Upload Another File
             </button>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-4">
-              <h3 className="font-bold text-gray-800 border-b border-gray-200 pb-2 flex items-center gap-2">
-                <FileText className="w-4 h-4 text-gray-600"/>
+              <h3 className="font-bold text-fintech-primary border-b border-gray-200 pb-2 flex items-center gap-2">
+                <FileText className="w-4 h-4 text-fintech-secondary"/>
                 What we found
               </h3>
               
               <div className="bg-white p-4 rounded-xl border border-gray-200 space-y-3">
                 <div className="flex justify-between items-center pb-2 border-b border-gray-200">
-                  <span className="text-sm text-gray-600 uppercase font-semibold">Headline Rate</span>
-                  <span className="font-bold text-gray-900">{extractionResult.product.headline_label}</span>
+                  <span className="text-sm text-fintech-secondary uppercase font-semibold">Headline Rate</span>
+                  <span className="font-bold text-fintech-primary">{extractionResult.product.headline_label}</span>
                 </div>
                 <div className="flex justify-between items-center pb-2 border-b border-gray-200">
-                  <span className="text-sm text-gray-600 uppercase font-semibold">Category</span>
-                  <span className="font-bold text-blue-700 capitalize">{extractionResult.product.category}</span>
+                  <span className="text-sm text-fintech-secondary uppercase font-semibold">Category</span>
+                  <span className="font-bold text-fintech-accent capitalize">{extractionResult.product.category}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600 uppercase font-semibold">Lock-in Period</span>
-                  <span className="font-bold text-gray-900">{extractionResult.product.lock_in_months} months</span>
+                  <span className="text-sm text-fintech-secondary uppercase font-semibold">Lock-in Period</span>
+                  <span className="font-bold text-fintech-primary">{extractionResult.product.lock_in_months} months</span>
                 </div>
               </div>
 
-              <h3 className="font-bold text-gray-800 border-b border-gray-200 pb-2 mt-6 flex items-center gap-2">
-                <AlertTriangle className="w-4 h-4 text-yellow-700"/>
+              <h3 className="font-bold text-fintech-primary border-b border-gray-200 pb-2 mt-6 flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4 text-fintech-warning"/>
                 Fees & Penalties
               </h3>
               
               <div className="bg-white p-4 rounded-xl border border-gray-200 space-y-3">
                 <div className="flex justify-between items-center pb-2 border-b border-gray-200">
-                  <span className="text-sm text-gray-600 uppercase font-semibold">Processing Fee</span>
-                  <span className="font-bold text-gray-900">
+                  <span className="text-sm text-fintech-secondary uppercase font-semibold">Processing Fee</span>
+                  <span className="font-bold text-fintech-primary">
                     {extractionResult.product.evidence_map.processing_fee_pct?.status === 'FOUND' 
                       ? `${extractionResult.product.processing_fee_pct}%` : 'Not Found'}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600 uppercase font-semibold">Penalty for withdrawing early</span>
-                  <span className="font-bold text-red-600">
+                  <span className="text-sm text-fintech-secondary uppercase font-semibold">Penalty for withdrawing early</span>
+                  <span className="font-bold text-fintech-danger">
                     {extractionResult.product.evidence_map.prepayment_penalty_pct?.status === 'FOUND' 
                       ? `${extractionResult.product.prepayment_penalty_pct}%` : 'Not Found'}
                   </span>
@@ -171,42 +171,42 @@ export default function DocumentScanner({ onProductExtracted }) {
             </div>
 
             <div className="space-y-4 flex flex-col h-full">
-              <h3 className="font-bold text-gray-800 border-b border-gray-200 pb-2 flex items-center gap-2">
-                <ShieldAlert className="w-4 h-4 text-blue-700"/>
+              <h3 className="font-bold text-fintech-primary border-b border-gray-200 pb-2 flex items-center gap-2">
+                <ShieldAlert className="w-4 h-4 text-fintech-accent"/>
                 Potential Concerns
               </h3>
-              <div className="bg-blue-50 p-4 rounded-xl border border-blue-200 text-sm text-gray-700 flex-1">
-                <p className="mb-4 text-sm text-blue-800 font-semibold uppercase tracking-wider">Analysis Summary</p>
+              <div className="bg-fintech-bg p-4 rounded-xl border border-fintech-border text-sm text-gray-700 flex-1">
+                <p className="mb-4 text-sm text-fintech-accent font-semibold uppercase tracking-wider">Analysis Summary</p>
                 <ul className="space-y-3">
                   {extractionResult.product.evidence_map.prepayment_penalty_pct?.status === 'FOUND' && (
                     <li className="flex gap-2">
-                      <AlertTriangle className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
+                      <AlertTriangle className="w-4 h-4 text-fintech-danger shrink-0 mt-0.5" />
                       <span>
-                        <span className="font-semibold text-red-700">AlignFin found this clause in your document:</span> A penalty of {extractionResult.product.prepayment_penalty_pct}% exists for early withdrawal. This term may be unfavorable depending on your situation.
+                        <span className="font-semibold text-fintech-danger">AlignFin found this clause in your document:</span> A penalty of {extractionResult.product.prepayment_penalty_pct}% exists for early withdrawal. This term may be unfavorable depending on your situation.
                       </span>
                     </li>
                   )}
                   {extractionResult.product.evidence_map.processing_fee_pct?.status === 'FOUND' && (
                     <li className="flex gap-2">
-                      <AlertTriangle className="w-4 h-4 text-yellow-700 shrink-0 mt-0.5" />
+                      <AlertTriangle className="w-4 h-4 text-fintech-warning shrink-0 mt-0.5" />
                       <span>
-                        <span className="font-semibold text-yellow-800">AlignFin found this clause in your document:</span> An upfront processing fee of {extractionResult.product.processing_fee_pct}% was extracted.
+                        <span className="font-semibold text-fintech-warning">AlignFin found this clause in your document:</span> An upfront processing fee of {extractionResult.product.processing_fee_pct}% was extracted.
                       </span>
                     </li>
                   )}
                   {extractionResult.product.lock_in_months > 0 && (
                     <li className="flex gap-2">
-                      <AlertTriangle className="w-4 h-4 text-yellow-700 shrink-0 mt-0.5" />
+                      <AlertTriangle className="w-4 h-4 text-fintech-warning shrink-0 mt-0.5" />
                       <span>
-                        <span className="font-semibold text-yellow-800">Potential concern:</span> Your funds will be completely locked for {extractionResult.product.lock_in_months} months. Make sure you have enough emergency reserves.
+                        <span className="font-semibold text-fintech-warning">Potential concern:</span> Your funds will be completely locked for {extractionResult.product.lock_in_months} months. Make sure you have enough emergency reserves.
                       </span>
                     </li>
                   )}
                   {(!extractionResult.product.evidence_map.prepayment_penalty_pct || extractionResult.product.evidence_map.prepayment_penalty_pct.status === 'NOT_FOUND') && extractionResult.product.lock_in_months === 0 && (
                     <li className="flex gap-2">
-                      <Check className="w-4 h-4 text-indigo-600 shrink-0 mt-0.5" />
+                      <Check className="w-4 h-4 text-fintech-accent shrink-0 mt-0.5" />
                       <span>
-                        <span className="font-semibold text-indigo-700">No major red flags detected</span> in the explicit clauses provided regarding early exits or hidden costs. However, always confirm final rates with your provider.
+                        <span className="font-semibold text-fintech-accent">No major red flags detected</span> in the explicit clauses provided regarding early exits or hidden costs. However, always confirm final rates with your provider.
                       </span>
                     </li>
                   )}
