@@ -149,7 +149,7 @@ export default function App() {
 
   const handleRunComparison = async () => {
     if (selectedForCompare.length < 2) return;
-    setIsLoading(true);
+    setIsEvaluating(true);
     try {
       const matrix = await compareProducts(profile, selectedForCompare);
       setComparisonMatrix(matrix);
