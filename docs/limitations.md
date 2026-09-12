@@ -4,42 +4,66 @@ This document provides a transparent overview of the technical boundaries, analy
 
 ---
 
-## 1. Scope & Analytical Boundaries
+## Recommendation Scope
 
-AlignFin is designed as an **educational decision-support intelligence platform**. It is explicitly **not** a licensed financial advisory service, broker, or loan originator.
+AlignFin evaluates relative mathematical suitability based entirely on the user's supplied profile, goals, and available product information. It is designed as an educational decision-support intelligence platform.
+
+It is explicitly **not** a guarantee of financial outcome, nor is it a licensed financial advisory service, broker, or loan originator.
 
 ### What AlignFin Does:
 * Evaluates relative mathematical suitability based on user-provided profile constraints.
 * Surfaces disclosed non-headline costs (processing fees, exit loads, lock-ins, prepayment penalties).
-* Highlights mismatches between psychological risk tolerance and objective financial buffer (FBSI).
-* Calculates illustrative scenario projections (Conservative, Base, Optimistic) and inflation drag.
+* Highlights mismatches between psychological risk tolerance and objective financial buffer.
 
 ### What AlignFin Does Not Do:
 * Guarantee product approval, loan disbursement, or credit underwriting.
 * Guarantee investment returns, yield outcomes, or portfolio performance.
-* Discover hidden or undisclosed charges that are omitted from provided documentation/catalogs.
 * Provide personalized tax advisory or legal counsel.
 
 ---
 
-## 2. Product Catalog Data Scope
+## Product Data Freshness
 
-* **Curated Database**: The current production system evaluates products stored within its curated catalog or uploaded via document extraction.
-* **No Dynamic Web Scraping**: The system does not crawl unverified third-party rate sites in real-time, avoiding stale or corrupted scraped data.
-* **Provider Verification**: Users are instructed to verify final terms with official issuing institutions prior to application.
+Current product data is curated for the prototype rather than guaranteed to be a continuously refreshed live market feed. Users should always verify current rates, terms, and conditions directly with providers.
 
----
+## Source Provenance
 
-## 3. Document Extraction Capabilities
-
-* **Supported Formats**: Native text **PDF** (`.pdf`) and text files (`.txt`).
-* **Unsupported Formats**: Scanned image PDFs, `.png`, `.jpg`, `.docx`, and `.doc` files are restricted in production to prevent inaccurate OCR processing.
-* **Disclosed Text Boundary**: Extraction rules extract parameters explicitly stated in document text.
-* **Evidence Rule (`NOT_FOUND` $\ne$ ZERO)**: Missing disclosures trigger missing-evidence penalties rather than assuming a zero-cost fee structure.
+AlignFin utilizes metadata fields to display the source of product information. However, the current implementation cannot algorithmically guarantee the legal authenticity of uploaded product documents. Placeholder or default metadata should not be construed as institutionally "verified."
 
 ---
 
-## 4. Simplified Tax & Inflation Models
+## Document Extraction Boundary
 
-* **Inflation Assumption**: Real purchasing power calculations utilize a uniform **6% illustrative annual inflation assumption**.
-* **Tax Baselines**: Tax outcome estimates rely on simplified baselines (e.g. 30% slab rate for taxable income or 12.5% LTCG above ₹1L threshold). They do not account for individual deductions, surcharge slabs, or municipal tax variations.
+Production extraction is strictly limited to formats actually supported by the current text-parsing implementation:
+- **PDF** (`.pdf`) containing native text
+- **TXT** (`.txt`)
+
+Scanned image PDFs, `.png`, `.jpg`, `.docx`, and `.doc` files are restricted to prevent inaccurate OCR processing. Image OCR and DOCX processing are not supported.
+
+---
+
+## Risk Capacity Limitation
+
+Financial capacity (the Financial Buffer & Solvency Index) is estimated purely from observable, self-reported profile inputs such as income, expenses, savings, debt burden, and liquidity requirements. It is an objective mathematical ratio model. It is **not** a complete behavioral model, credit-risk model, or comprehensive credit-bureau check.
+
+---
+
+## Missing Evidence
+
+AlignFin operates on a strict evidence rule: **NOT_FOUND != ZERO**.
+
+Missing information in a brochure or catalog means the system does not have evidence to establish that condition. If a product fails to disclose its prepayment penalty, AlignFin will not assume the penalty is 0%. Missing disclosures trigger missing-evidence penalties rather than assuming a zero-cost fee structure.
+
+---
+
+## Scenario Assumptions
+
+AlignFin calculates illustrative Conservative, Base, and Optimistic scenarios for investments. These scenarios are strictly illustrative mathematical projections based on historical asset class standard deviations. They are **not** predictions or guarantees of future returns.
+
+## Inflation
+
+Inflation-adjusted calculations use an illustrative assumption (e.g., 6%) to demonstrate purchasing power drag. This should not be interpreted as a macroeconomic forecast.
+
+## Tax
+
+Tax outcome estimates rely on simplified baselines (e.g., flat bracket assumptions for capital gains vs. ordinary income). They do not account for individual deductions, surcharge slabs, or municipal tax variations. They are not a personalized tax calculation.

@@ -1,116 +1,180 @@
-# AlignFin — Explainable Financial Product Suitability Intelligence
+# AlignFin
 
-> **“Eligibility tells you what you can get. AlignFin tells you what fits.”**
+> "Eligibility tells you what you can get. AlignFin tells you what fits."
 
-[![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688.svg)](https://fastapi.tiangolo.com)
-[![React](https://img.shields.io/badge/Frontend-React%20%2B%20Vite%20%2B%20Tailwind-61DAFB.svg)](https://vitejs.dev)
-[![Python](https://img.shields.io/badge/Python-3.14%20%2F%203.11-3776AB.svg)](https://python.org)
-[![Tests](https://img.shields.io/badge/Tests-9%20Passed-success.svg)]()
-[![Event](https://img.shields.io/badge/Hackathon-HACKNOVA'26%20(24H)-orange.svg)]()
+AlignFin is an explainable financial product suitability and decision-support platform designed to analyze personal financial profiles against specific financial products. It uses a deterministic engine to assess whether a product fits a person's objective financial capacity, goals, and timeline, producing transparent, evidence-backed reasoning.
 
-AlignFin is a decision-support and financial-literacy intelligence platform designed for **HACKNOVA’26 (Domain: Finance & Fintech, Problem Statement: PS-08)**.
+## Live Demo
 
----
+**Production Frontend**: [https://alignfin.netlify.app](https://alignfin.netlify.app)
+**Production API**: [https://alignfin-backend.onrender.com](https://alignfin-backend.onrender.com)
+**API Documentation**: [https://alignfin-backend.onrender.com/docs](https://alignfin-backend.onrender.com/docs)
 
-## 💡 The Core Problem & Differentiation
+## Why AlignFin?
 
-Traditional financial comparison engines (BankBazaar, Paisabazaar, Policybazaar) answer:
-* *"Which loan has the lowest headline interest rate?"*
-* *"Which mutual fund advertised the highest historical return?"*
+Traditional comparison engines answer the question: *"What product is cheapest or highest-yielding?"* They sort by headline interest rates or historical returns.
 
-**AlignFin answers:**
-* *"Which product is more suitable FOR THIS SPECIFIC PERSON, and why?"*
-* *"What non-headline costs (upfront fees, prepayment penalties, exit loads, lock-ins) create hidden traps over the user's intended timeline?"*
-* *"Does the user's objective financial capacity support the risk they claim to tolerate?"*
+However, headline metrics are incomplete. AlignFin shifts the question to: *"Which product fits this person's financial situation, objective, risk capacity, liquidity needs, horizon and constraints — and why?"* 
 
----
+There is a fundamental distinction between:
+- **Eligibility**: Does the bank allow you to take this product?
+- **Comparison**: Which product looks best on a billboard?
+- **Suitability**: Can your budget handle the actual Total Cost of Borrowing? Does the lock-in period trap the liquidity you need for an upcoming goal? Is the risk aligned with your true emergency buffer?
 
-## 🚀 3 Killer Demo Scenarios Tested & Built-in
+## Core Capabilities
 
-| Scenario | Persona & Circumstances | Traditional Advice (Flawed) | AlignFin Intelligence Output |
-|---|---|---|---|
-| **1. Headline Rate Trap (Loans)** | **Rohan (24 yrs, ₹35k income, ₹2L loan, 3-yr horizon)** | Picks **Loan A (8.5%)** because 8.5% < 9.2%. | **Loan B (9.2%) wins with 88/100 score!** Exposes ₹8k upfront fee + 4.5% prepayment foreclosure penalty on Loan A that costs more over 3 years. |
-| **2. Risk Mismatch (Investments)** | **Aarav (22 yrs, ₹25k income, ₹23k expenses, only ₹10k savings, claims 'HIGH' risk)** | Recommends speculative crypto/smallcap equity. | **Flags CRITICAL RISK MISMATCH!** Detects $<0.5$ mo emergency buffer, heavily penalizes volatile assets (-32 pts), and prioritizes capital preservation. |
-| **3. 5-Year Horizon (Wealth)** | **Priya (28 yrs, ₹65k income, ₹2.5L savings, 5-yr goal)** | Recommends rigid 5-year locked FDs or 80C products. | Recommends dynamic **Balanced Advantage Hybrid Funds** (12.2% CAGR, low fee, open liquidity) avoiding rigid statutory lock-in traps. |
+- **Authenticated User Profiles**: Secure registration, login, and persistence of user financial data.
+- **Financial Profile Analysis**: Evaluation of monthly surplus, debt-to-income, and savings buffers.
+- **Risk Tolerance vs Risk Capacity**: Checking claimed risk comfort against mathematical risk capacity.
+- **Category-Specific Suitability**:
+  - **Loan Suitability Analysis**: Amortization, fees, and debt-stress modeling.
+  - **Investment Suitability Analysis**: Volatility vs. capacity, lock-ins vs. horizon.
+  - **Savings/FD Suitability Analysis**: Emergency liquidity and withdrawal penalties.
+- **Goal-Aware Recommendations**: Matching product constraints to user timelines and objectives.
+- **Suitability Score & Match Strength**: A transparent, 100-point index with "Not Recommended" boundary outcomes.
+- **Scenario Analysis**: Illustrative conservative, base, and optimistic projections.
+- **Inflation-Adjusted Purchasing Power**: Highlighting the illustrative drag of inflation on returns.
+- **Illustrative Tax Impact**: Basic estimation of tax drag on yields.
+- **Product Comparison**: Side-by-side matrices of non-headline costs and tradeoffs.
+- **Financial Document Extraction**: Parsing PDFs and text files for product terms.
+- **Evidence-Aware Analysis**: Explicit handling of missing disclosures (e.g., hidden fees).
+- **Explanations**: Plain-text translation of the mathematical deductions.
 
----
+## How It Works
 
-## 🏗️ Technical Architecture & Scoring Formula
+```text
+  User Profile
+       +
+  Product Data
+       +
+Document Evidence
+       ↓
+Suitability Engine
+       ↓
+Explainable Recommendation
+```
 
-AlignFin employs a **Deterministic Financial Buffer & Solvency Index (FBSI)** with zero mathematical hallucination:
+The deterministic suitability engine acts as the absolute source of truth for the recommendation and scoring. 
 
-$$\text{Suitability Score } S = \max\left(0, \min\left(100, \sum_{i=1}^5 (w_i \cdot d_i) - \sum \text{Penalties}\right)\right)$$
+## Core Design Principle
 
-### Key Components:
-1. **Risk Capacity Engine (`risk_engine.py`)**: Computes Monthly Surplus Ratio, Debt-to-Income (DTI), and Emergency Runway (Months).
-2. **Loan Suitability Engine (`loan_evaluator.py`)**: Models Amortization, Total Cost of Borrowing (TCOB) over user horizon, prepayment penalty drag, and DTI stress.
-3. **Investment Suitability Engine (`investment_evaluator.py`)**: Compares Volatility vs Capacity, Lock-in vs Horizon, and Net Compound Yield after expense ratio drag.
-4. **Savings Evaluator (`savings_evaluator.py`)**: Evaluates instant emergency liquidity, DICGC safety, and premature withdrawal penalties.
-5. **Dual-Mode Explainability Engine (`explanation_engine.py`)**: Generates transparent, inspectable mathematical breakdowns and natural-language reasoning traces.
+The recommendation layer is **deterministic and reproducible**. For the same inputs and product data, the core suitability logic follows the exact same rules rather than asking an LLM to make an unconstrained or unpredictable financial decision.
 
----
+Document intelligence plays a strict, supporting role:
+`Document → extraction → structured information → evidence → suitability analysis`
 
-## ⚡ Quick Start & Run Instructions
+AI/Extraction does not override the deterministic financial calculations; it merely supplies the structured evidence that the math engine requires.
 
-### 1. Backend Setup & Startup
+## Product Analysis
+
+- **Loans**: Evaluates the Total Cost of Borrowing (TCOB) over the user's intended horizon, factoring in processing fees, prepayment penalties, EMI affordability, and debt stress.
+- **Investments**: Assesses risk alignment against the user's risk capacity, liquidity constraints, statutory lock-ins, expense ratios, and illustrative scenario projections.
+- **Savings**: Evaluates emergency liquidity availability, base yield, safety (DICGC), and premature withdrawal considerations.
+
+## Evidence & Transparency
+
+AlignFin operates on a strict evidence model. The most important principle is:
+
+**`NOT_FOUND` does NOT mean ZERO.**
+
+When information is unavailable (e.g., a brochure fails to mention processing fees), the system identifies the missing information and applies a penalty for lack of transparency, rather than inventing a zero-fee assumption. 
+
+AlignFin can surface disclosed non-headline costs such as processing fees, exit loads, prepayment penalties, lock-ins, and withdrawal restrictions. It relies strictly on the evidence supplied in the documentation or product catalog.
+
+## Technology Stack
+
+**Frontend**:
+- React
+- Vite
+- Tailwind CSS
+- Recharts
+- Lucide
+
+**Backend**:
+- Python
+- FastAPI
+- Pydantic
+- SQLAlchemy
+
+**Database**:
+- PostgreSQL (Production on Render)
+- SQLite (Local development default)
+
+**Authentication**:
+- JWT-based authentication
+- bcrypt password hashing
+
+**Deployment**:
+- Netlify (Frontend)
+- Render (Backend)
+- Render PostgreSQL (Database)
+
+## Architecture
+
+For a deep dive into the system components, evaluation lifecycle, and mathematical formulation, see:
+[Architecture Documentation](docs/architecture.md)
+
+## Limitations
+
+For a transparent overview of data freshness, extraction boundaries, and analytical scope, see:
+[Limitations Documentation](docs/limitations.md)
+
+## Getting Started
+
+### Backend Setup
 ```bash
-# Navigate to backend and create venv
 cd backend
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 
-# Run backend test suite (9 automated unit & scenario tests)
+# Run backend tests
 PYTHONPATH=. pytest tests/ -v
 
-# Start FastAPI server on port 8000
+# Start FastAPI server
 PYTHONPATH=. uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-### 2. Frontend Setup & Startup
+### Frontend Setup
 ```bash
-# Navigate to frontend
 cd frontend
 npm install
-npm run dev -- --host 0.0.0.0
+npm run dev
 ```
-Open **`http://localhost:5173`** in your browser.
 
----
+## Repository Structure
 
-## 📁 Repository Structure
-
-```
+```text
 AlignFin/
 ├── backend/
 │   ├── app/
-│   │   ├── database/       # PostgreSQL DB and 30-product seed catalog
+│   │   ├── database/       # Database connection and seed catalog
 │   │   ├── engine/         # Deterministic FBSI & Category Evaluators
-│   │   ├── models/         # Pydantic Schemas (UserProfile, Product, Results)
-│   │   ├── routers/        # FastAPI Endpoints (/personas, /products, /evaluate)
-│   │   └── main.py         # Main FastAPI entry point with CORS
-│   ├── tests/              # 9 comprehensive pytest scenario test cases
+│   │   ├── models/         # Pydantic Schemas & SQLAlchemy Models
+│   │   ├── routers/        # FastAPI Endpoints (auth, profile, products, evaluate)
+│   │   └── main.py         # Main FastAPI entry point
+│   ├── tests/              # Pytest scenario test cases
 │   └── requirements.txt
 ├── frontend/
 │   ├── src/
-│   │   ├── components/     # ProfileWizard, SuitabilityCard, ComparisonView, ExplainabilityDrawer, CatalogExplorer
+│   │   ├── components/     # UI components (ProfileWizard, SuitabilityCard, etc.)
+│   │   ├── pages/          # Top-level route pages
 │   │   ├── services/       # REST API client
-│   │   ├── App.jsx         # Main state & UI coordinator
-│   │   └── main.jsx
+│   │   └── App.jsx         # Main application coordinator
 │   ├── package.json
 │   └── vite.config.js
 ├── docs/
-│   ├── architecture.md     # Mathematical formulation and architecture diagrams
-    ├── demo-script.md      # Live demo scenarios and talking points
-    └── limitations.md      # Known limitations and technical boundaries
+│   ├── architecture.md     # System design and mathematical formulation
+│   └── limitations.md      # Known boundaries and analytical constraints
 └── README.md
 ```
 
----
+## Responsible Use
 
-## 🏆 Hackathon Defense Highlights
+AlignFin is a decision-support and financial-literacy platform. It is **not** a licensed financial adviser, broker, lender, tax adviser, or legal adviser. 
 
-* **100% Deterministic Core**: No black-box random rankings or LLM hallucinations for scores.
-* **Separation of Concerns**: Product catalog decoupled in PostgreSQL; easily swap prototype data with live open-banking feeds.
-* **Inspectable Explainability**: Every single score deduction is displayed with exact formulas and weights.
-* **Multi-Device Ready**: Designed for cross-laptop/mobile testing during hackathon presentations.
+All illustrative scenarios, scores, and tax/inflation estimates are for educational purposes. Product terms should always be verified directly with the issuing institution before any financial decisions are made.
+
+## Project Background
+
+AlignFin was originally conceived and built as a submission for **HACKNOVA'26**.
