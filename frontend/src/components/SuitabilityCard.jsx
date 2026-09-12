@@ -56,13 +56,22 @@ export default function SuitabilityCard({
         </div>
 
         {/* Product Name & Rate */}
-        <div>
-          <h3 className="text-lg font-bold text-fintech-primary tracking-tight">
-            {prod.name}
-          </h3>
-          <p className="text-lg font-semibold text-fintech-accent mt-0.5">
-            {prod.headline_label}
-          </p>
+        <div className="flex justify-between items-start">
+          <div>
+            <h3 className="text-lg font-bold text-fintech-primary tracking-tight">
+              {prod.name}
+            </h3>
+            <p className="text-lg font-semibold text-fintech-accent mt-0.5">
+              {prod.headline_label}
+            </p>
+          </div>
+          <div className="text-right">
+            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-0.5">Suitability Score</p>
+            <div className="flex items-baseline justify-end gap-0.5">
+              <span className="text-2xl font-black text-gray-800">{result.suitability_score.toFixed(0)}</span>
+              <span className="text-xs font-bold text-gray-400">/100</span>
+            </div>
+          </div>
         </div>
 
         {/* Key Reason & Warning */}

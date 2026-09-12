@@ -1,4 +1,5 @@
 import React from 'react';
+import MarkdownRenderer from './MarkdownRenderer';
 import { 
   X, 
   HelpCircle, 
@@ -75,10 +76,8 @@ export default function ExplainabilityDrawer({ result, profile, onClose }) {
                 <Sparkles className="h-3.5 w-3.5" />
                 <span>Deterministic Reasoning Trace</span>
               </div>
-              <div className="text-sm text-gray-800 leading-relaxed space-y-1.5 font-medium">
-                {result.ai_narrative.split('\n').map((para, i) => (
-                  <p key={i}>{para}</p>
-                ))}
+              <div className="text-sm">
+                <MarkdownRenderer content={result.ai_narrative} />
               </div>
             </div>
           )}

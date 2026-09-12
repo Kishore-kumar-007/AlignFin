@@ -1,4 +1,5 @@
 import React from 'react';
+import MarkdownRenderer from './MarkdownRenderer';
 import { 
   X, 
   Scale, 
@@ -83,8 +84,8 @@ export default function ComparisonView({ matrix, onClose, onOpenExplain }) {
               Decision Intelligence Verdict
             </span>
           </div>
-          <div className="text-sm text-gray-800 leading-relaxed whitespace-pre-line font-medium">
-            {matrix.verdict}
+          <div className="text-sm">
+            <MarkdownRenderer content={matrix.verdict} />
           </div>
         </div>
 

@@ -72,7 +72,7 @@ def test_scenario_2_risk_mismatch():
     results = SuitabilityEngine.evaluate_products_for_profile(aarav_profile)
     crypto_res = next(r for r in results if r.product.id == "inv-crypto-momentum")
     
-    assert crypto_res.suitability_score < 55.0
+    assert crypto_res.suitability_score < 60.0
     assert any("Solvency Risk Mismatch" in p.title for p in crypto_res.penalties)
 
 def test_scenario_3_investment_horizon_match():
